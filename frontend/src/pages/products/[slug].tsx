@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Navigation from '../../components/navigation';
 import Footer from '../../components/footer';
+import ParticleCanvas from '../../components/particle-canvas';
+import LivePurchaseTicker from '../../components/live-purchase-ticker';
 import { useCart } from '../../context/cart';
 import { showToast } from '../../components/toast';
 import { INITIAL_400_PRODUCTS, Product } from '../../data/products';
@@ -29,17 +31,28 @@ interface ProductPageProps {
   product: ProductDetails | null;
 }
 
+const NEPAL_DISTRICTS = [
+  { name: 'Kathmandu Valley', time: 'Dispatches in 2 Hours (Same Day Delivery)', cost: 'Free' },
+  { name: 'Pokhara & Kaski', time: '1 - 2 Days Express Shipping', cost: '$2.50' },
+  { name: 'Lalitpur & Bhaktapur', time: 'Same Day Delivery', cost: 'Free' },
+  { name: 'Chitwan & Bharatpur', time: '2 Days Express Courier', cost: '$3.00' },
+  { name: 'Biratnagar & Sunsari', time: '2 - 3 Days Postal Express', cost: '$3.50' },
+  { name: 'Butwal & Rupandehi', time: '2 Days Express Delivery', cost: '$3.00' },
+  { name: 'Other 71 Nepal Districts', time: '2 - 4 Days Postal Express', cost: '$4.00' },
+];
+
 const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) => {
   const router = useRouter();
   const { addItem } = useCart();
   const [product, setProduct] = useState<ProductDetails | null>(initialProduct);
   const [quantity, setQuantity] = useState(1);
+  const [selectedDistrict, setSelectedDistrict] = useState(NEPAL_DISTRICTS[0]);
+  const [activeTab, setActiveTab] = useState<'overview' | 'specs' | 'reviews' | 'faq'>('overview');
   const [allProducts, setAllProducts] = useState<ProductDetails[]>(INITIAL_400_PRODUCTS);
+  const [selectedImage, setSelectedImage] = useState<string>('');
 
   useEffect(() => {
     const slug = router.query.slug as string;
-
-    // Load custom products from localStorage
     const saved = localStorage.getItem('custom_products');
     let loadedProducts: ProductDetails[] = INITIAL_400_PRODUCTS;
     if (saved) {
@@ -52,40 +65,46 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
     }
     setAllProducts(loadedProducts);
 
-    // Look up product by slug or id
     if (slug) {
       const found = loadedProducts.find(
         (p) => p.slug === slug || p.id === slug || p.slug.toLowerCase() === slug.toLowerCase()
       );
       if (found) {
         setProduct(found);
+        setSelectedImage(found.imageUrl || found.image || '');
       } else {
         const fallbackFound = INITIAL_400_PRODUCTS.find(
           (p) => p.slug === slug || p.id === slug || p.slug.toLowerCase() === slug.toLowerCase()
         );
-        if (fallbackFound) setProduct(fallbackFound);
+        if (fallbackFound) {
+          setProduct(fallbackFound);
+          setSelectedImage(fallbackFound.imageUrl || fallbackFound.image || '');
+        }
       }
     }
   }, [router.query.slug]);
 
   if (router.isFallback) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <p className="text-[#f57224] font-bold text-lg">Loading product details...</p>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center font-sans">
+        <div className="text-center space-y-3">
+          <div className="w-12 h-12 rounded-full border-4 border-cyan-400 border-t-transparent animate-spin mx-auto" />
+          <p className="text-cyan-400 font-bold text-sm">Loading Karki Store Product Specifications...</p>
+        </div>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
         <Navigation />
-        <main className="flex-1 flex flex-col items-center justify-center py-20 text-center px-4">
-          <div className="text-6xl mb-4">🔍</div>
-          <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Product Not Found</h1>
-          <p className="text-slate-500 mb-6 text-sm">The product you are looking for does not exist or has been removed.</p>
-          <Link href="/shop" className="rounded-xl bg-[#f57224] px-6 py-3 font-bold text-white text-xs hover:bg-orange-600 transition shadow-md">
-            Browse All 400 Products
+        <main className="flex-1 flex flex-col items-center justify-center py-20 text-center px-4 space-y-4">
+          <div className="text-6xl">📦</div>
+          <h1 className="text-3xl font-black text-white">Item Not Found in Catalog</h1>
+          <p className="text-slate-400 text-xs max-w-sm">The product you are looking for is currently being updated or has moved.</p>
+          <Link href="/shop" className="rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 px-6 py-3 font-black text-white text-xs hover:scale-105 transition shadow-2xl">
+            Browse All 400 Products Marketplace →
           </Link>
         </main>
         <Footer />
@@ -93,7 +112,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
     );
   }
 
-  const stockCount = product.stock !== undefined ? product.stock : 15;
+  const stockCount = product.stock !== undefined ? product.stock : 18;
   const isOutOfStock = stockCount <= 0;
 
   const handleAddToCart = () => {
@@ -105,106 +124,154 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
       quantity,
       slug: product.slug,
     });
-    showToast(`Added ${quantity} × "${product.name}" to cart!`, 'success');
+    showToast(`⚡ Added ${quantity} × "${product.name}" to your Karki Store cart!`, 'success');
+  };
+
+  const handleInstantBuy = () => {
+    handleAddToCart();
+    router.push('/checkout');
   };
 
   const specsList = product.specs || [
-    '100% Authentic Product Guarantee',
-    'Full 1-Year Manufacturer Warranty',
-    'High-durability premium materials',
-    'Universal device compatibility',
-    'Free express shipping available',
+    '100% Genuine Karki Care Certified Authentic Item',
+    'Official 1-Year Manufacturer Replacement Guarantee',
+    'High-Durability Aerospace Matte Finish Housing',
+    'Universal Plug & Play Compatibility across devices',
+    'Free Kathmandu Valley Express Shipping Included',
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative overflow-x-hidden">
       <Head>
-        <title>{product.name} | Daraz ShopHub</title>
+        <title>{product.name} | Karki Store Tech Marketplace</title>
         <meta name="description" content={product.description} />
       </Head>
 
+      <ParticleCanvas />
+      <LivePurchaseTicker />
       <Navigation />
 
-      <main className="flex-1 mx-auto max-w-7xl px-4 py-10">
-        {/* Breadcrumb */}
-        <div className="mb-6 flex items-center gap-2 text-xs font-semibold text-slate-500">
-          <Link href="/" className="hover:text-slate-900">Home</Link>
+      <main className="flex-1 relative z-10 mx-auto max-w-7xl px-4 py-8 space-y-10">
+        
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-400 bg-slate-900/80 px-4 py-2.5 rounded-2xl border border-slate-800 w-fit backdrop-blur-md">
+          <Link href="/" className="hover:text-cyan-400 transition">Home</Link>
           <span>/</span>
-          <Link href="/shop" className="hover:text-slate-900">Shop</Link>
+          <Link href="/shop" className="hover:text-cyan-400 transition">Shop Catalog</Link>
           <span>/</span>
-          <span className="text-slate-900 font-bold truncate max-w-xs">{product.name}</span>
+          <span className="text-cyan-400 font-extrabold truncate max-w-xs">{product.name}</span>
         </div>
 
-        <div className="grid gap-10 md:grid-cols-2 bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-          {/* Product Media Gallery */}
-          <div className="space-y-4">
-            <div className="aspect-square bg-slate-50 rounded-2xl flex items-center justify-center text-7xl relative overflow-hidden border border-slate-100 shadow-inner">
-              {product.imageUrl || product.image ? (
+        {/* MAIN PRODUCT HERO CONTAINER */}
+        <div className="grid gap-10 lg:grid-cols-12 bg-slate-900/90 rounded-3xl p-6 sm:p-10 border border-indigo-950 shadow-2xl backdrop-blur-md">
+          
+          {/* LEFT 5-COL: PRODUCT MEDIA GALLERY */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="aspect-square bg-slate-950 rounded-3xl flex items-center justify-center text-7xl relative overflow-hidden border border-slate-800 shadow-2xl group">
+              {selectedImage ? (
                 <img
-                  src={product.imageUrl || product.image}
+                  src={selectedImage}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (
                 '📦'
               )}
               {isOutOfStock ? (
-                <span className="absolute top-4 right-4 rounded-full bg-red-600 text-white text-xs font-black px-3 py-1 uppercase">
+                <span className="absolute top-4 right-4 rounded-full bg-red-500/20 text-red-400 border border-red-500/40 text-xs font-black px-3.5 py-1 uppercase backdrop-blur-md">
                   Out of Stock
                 </span>
-              ) : stockCount <= 5 ? (
-                <span className="absolute top-4 right-4 rounded-full bg-amber-500 text-white text-xs font-black px-3 py-1 uppercase">
-                  Only {stockCount} left
-                </span>
               ) : (
-                <span className="absolute top-4 right-4 rounded-full bg-emerald-600 text-white text-xs font-black px-3 py-1 uppercase">
-                  In Stock
+                <span className="absolute top-4 right-4 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black px-3.5 py-1 uppercase flex items-center gap-1.5 backdrop-blur-md">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  In Stock ({stockCount} Left)
                 </span>
               )}
             </div>
+
+            {/* Karki Genuine Guarantee Seal */}
+            <div className="rounded-2xl bg-slate-950 p-4 border border-indigo-950 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl border border-cyan-500/30">
+                🛡️
+              </div>
+              <div>
+                <p className="text-xs font-black text-white">Karki Care Verified Authentic</p>
+                <p className="text-[11px] text-slate-400">100% Original Serial Code • 1-Yr Replacement Guarantee</p>
+              </div>
+            </div>
           </div>
 
-          {/* Product Information */}
-          <div className="flex flex-col justify-between space-y-6">
+          {/* RIGHT 7-COL: PRODUCT DETAILS & PURCHASING CONTROLS */}
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-orange-100 text-[#f57224] px-3 py-1 text-xs font-black uppercase">
-                  {product.category || 'DarazMall'}
+              
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="bg-indigo-950 text-cyan-300 text-xs font-black px-3 py-1 rounded-full border border-indigo-800 uppercase tracking-wider">
+                  {product.category || 'Audio & Sound'}
                 </span>
-                <span className="text-xs text-yellow-500 font-bold">
-                  ★ {product.rating || '4.8'} ({product.reviewsCount || 42} Reviews)
+                <span className="bg-amber-500/20 text-amber-300 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/30 flex items-center gap-1">
+                  ⭐ {product.rating || '4.9'} / 5 ({product.reviewsCount || 64} Verified Reviews)
                 </span>
               </div>
 
-              <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
                 {product.name}
               </h1>
 
-              <div className="flex items-baseline gap-3">
-                <span className="text-4xl font-black text-[#f57224]">${product.price}</span>
-                <span className="text-xs text-slate-400 font-semibold">Inclusive of all taxes</span>
+              {/* Pricing Box */}
+              <div className="flex items-baseline gap-3 bg-slate-950 p-4 rounded-2xl border border-slate-800 w-fit">
+                <span className="text-4xl font-black text-cyan-400">${product.price}</span>
+                <span className="text-xs text-slate-400 line-through">${(parseFloat(product.price) * 1.25).toFixed(2)}</span>
+                <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded uppercase">Save 20%</span>
               </div>
 
-              <p className="text-slate-600 leading-relaxed text-sm">{product.description}</p>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                {product.description}
+              </p>
             </div>
 
-            {/* Quantity & CTA */}
-            <div className="space-y-4 pt-4 border-t border-slate-100">
+            {/* NEPAL 77-DISTRICT DELIVERY ESTIMATOR */}
+            <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-2">
+              <div className="flex justify-between items-center text-xs">
+                <span className="font-bold text-white flex items-center gap-1.5">
+                  <span>🚚 Express Delivery Estimator:</span>
+                </span>
+                <span className="text-cyan-400 font-mono font-bold">{selectedDistrict.cost} Shipping</span>
+              </div>
+              <select
+                value={selectedDistrict.name}
+                onChange={(e) => {
+                  const found = NEPAL_DISTRICTS.find((d) => d.name === e.target.value);
+                  if (found) setSelectedDistrict(found);
+                }}
+                className="w-full rounded-xl bg-slate-900 text-slate-200 border border-slate-800 px-3 py-2 text-xs font-bold focus:border-cyan-400 outline-none"
+              >
+                {NEPAL_DISTRICTS.map((d, idx) => (
+                  <option key={idx} value={d.name}>🇳🇵 {d.name} ({d.cost})</option>
+                ))}
+              </select>
+              <p className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                <span>✓ {selectedDistrict.time}</span>
+              </p>
+            </div>
+
+            {/* QUANTITY & CTA ACTIONS */}
+            <div className="space-y-4 pt-4 border-t border-slate-800">
               <div className="flex items-center gap-4">
-                <span className="text-xs font-bold text-slate-700 uppercase">Quantity:</span>
-                <div className="flex items-center rounded-xl border border-slate-300 bg-slate-50 overflow-hidden">
+                <span className="text-xs font-bold text-slate-300 uppercase">Quantity:</span>
+                <div className="flex items-center rounded-xl border border-slate-800 bg-slate-950 overflow-hidden">
                   <button
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                     disabled={isOutOfStock}
-                    className="px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-200 transition text-sm"
+                    className="px-3.5 py-2 font-bold text-slate-300 hover:bg-slate-800 transition text-sm disabled:opacity-40"
                   >
                     -
                   </button>
-                  <span className="px-4 py-1.5 font-bold text-slate-900 text-sm">{quantity}</span>
+                  <span className="px-4 py-2 font-black text-cyan-400 text-sm font-mono">{quantity}</span>
                   <button
                     onClick={() => setQuantity((q) => Math.min(stockCount, q + 1))}
                     disabled={isOutOfStock}
-                    className="px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-200 transition text-sm"
+                    className="px-3.5 py-2 font-bold text-slate-300 hover:bg-slate-800 transition text-sm disabled:opacity-40"
                   >
                     +
                   </button>
@@ -215,68 +282,144 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
                 <button
                   onClick={handleAddToCart}
                   disabled={isOutOfStock}
-                  className="flex-1 rounded-xl bg-[#f57224] py-4 text-white font-black text-sm hover:bg-orange-600 transition shadow-lg disabled:opacity-50"
+                  className="flex-1 rounded-xl bg-indigo-600 hover:bg-indigo-500 py-3.5 text-white font-black text-xs transition shadow-2xl uppercase tracking-wider border border-indigo-400/30 disabled:opacity-50"
                 >
                   {isOutOfStock ? 'OUT OF STOCK' : '+ ADD TO CART'}
                 </button>
-                <Link
-                  href="/checkout"
-                  onClick={handleAddToCart}
-                  className="rounded-xl border-2 border-slate-900 bg-slate-900 px-6 py-4 font-bold text-white text-sm hover:bg-slate-800 transition text-center"
+                <button
+                  onClick={handleInstantBuy}
+                  disabled={isOutOfStock}
+                  className="flex-1 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:scale-105 py-3.5 text-slate-950 font-black text-xs transition shadow-2xl uppercase tracking-wider border border-cyan-400 disabled:opacity-50"
                 >
-                  BUY NOW
-                </Link>
+                  ⚡ BUY NOW (eSewa / Khalti)
+                </button>
               </div>
-            </div>
-
-            {/* Product Key Specs */}
-            <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200">
-              <h3 className="font-bold text-slate-900 mb-3 text-xs uppercase tracking-wider">Specifications & Highlights</h3>
-              <ul className="space-y-2">
-                {specsList.map((spec, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 font-medium">
-                    <span className="text-emerald-600 font-bold">✓</span>
-                    <span>{spec}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </div>
 
-        {/* Detailed Overview */}
-        <section className="mt-12 rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
-          <h2 className="text-xl font-black text-slate-900 mb-3">Product Overview & Features</h2>
-          <p className="text-slate-700 leading-relaxed text-sm">
-            {product.longDescription || `${product.name} is engineered to deliver peak performance and maximum reliability. Experience enterprise-grade quality with Daraz ShopHub buyer protection and fast nationwide delivery.`}
-          </p>
+        {/* INTERACTIVE SPECIFICATIONS & REVIEWS TAB NAVIGATION */}
+        <section className="rounded-3xl bg-slate-900/90 p-6 sm:p-8 border border-indigo-950 shadow-2xl space-y-6 backdrop-blur-md">
+          <div className="flex gap-2 border-b border-slate-800 pb-4 overflow-x-auto text-xs font-bold">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`px-5 py-2.5 rounded-xl transition ${activeTab === 'overview' ? 'bg-cyan-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'}`}
+            >
+              Overview & Features
+            </button>
+            <button
+              onClick={() => setActiveTab('specs')}
+              className={`px-5 py-2.5 rounded-xl transition ${activeTab === 'specs' ? 'bg-cyan-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'}`}
+            >
+              Technical Specifications
+            </button>
+            <button
+              onClick={() => setActiveTab('reviews')}
+              className={`px-5 py-2.5 rounded-xl transition ${activeTab === 'reviews' ? 'bg-cyan-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'}`}
+            >
+              Verified Customer Reviews (64)
+            </button>
+            <button
+              onClick={() => setActiveTab('faq')}
+              className={`px-5 py-2.5 rounded-xl transition ${activeTab === 'faq' ? 'bg-cyan-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'}`}
+            >
+              Warranty & Returns FAQ
+            </button>
+          </div>
+
+          {/* TAB 1: OVERVIEW */}
+          {activeTab === 'overview' && (
+            <div className="space-y-4">
+              <h3 className="text-xl font-black text-white">Full Product Overview</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                {product.longDescription || `${product.name} represents the pinnacle of modern technology engineering. Designed for power users and enthusiasts across Nepal, it combines premium materials, instant connectivity, and rigorous quality testing. Every unit dispatched from our Kathmandu central hub undergoes multi-point inspection and includes the official Karki Care 1-year replacement warranty.`}
+              </p>
+            </div>
+          )}
+
+          {/* TAB 2: SPECS */}
+          {activeTab === 'specs' && (
+            <div className="space-y-4">
+              <h3 className="text-xl font-black text-white">Technical Specifications Table</h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {specsList.map((spec, idx) => (
+                  <div key={idx} className="rounded-2xl bg-slate-950 p-4 border border-slate-800 flex items-center gap-3">
+                    <span className="text-cyan-400 font-bold text-lg">✓</span>
+                    <span className="text-xs text-slate-200 font-medium">{spec}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: REVIEWS */}
+          {activeTab === 'reviews' && (
+            <div className="space-y-4">
+              <h3 className="text-xl font-black text-white">Customer Ratings & Verified Feedback</h3>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-2">
+                  <span className="text-cyan-400 font-bold text-xs">🇳🇵 Aarav K. (Kathmandu)</span>
+                  <p className="text-xs text-slate-300">"Super fast 2-hour delivery in Kathmandu! Genuine sealed product with official warranty sticker."</p>
+                  <p className="text-[10px] text-amber-400">Rating: ⭐⭐⭐⭐⭐ 5/5</p>
+                </div>
+                <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-2">
+                  <span className="text-cyan-400 font-bold text-xs">🇳🇵 Bikash T. (Pokhara)</span>
+                  <p className="text-xs text-slate-300">"Arrived in Pokhara in 24 hours. Paid via eSewa seamlessly. 10/10 recommended!"</p>
+                  <p className="text-[10px] text-amber-400">Rating: ⭐⭐⭐⭐⭐ 5/5</p>
+                </div>
+                <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-2">
+                  <span className="text-cyan-400 font-bold text-xs">🇳🇵 Pooja S. (Lalitpur)</span>
+                  <p className="text-xs text-slate-300">"High quality item. Karki Care warranty gives total peace of mind!"</p>
+                  <p className="text-[10px] text-amber-400">Rating: ⭐⭐⭐⭐⭐ 5/5</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: FAQ */}
+          {activeTab === 'faq' && (
+            <div className="space-y-4 text-xs">
+              <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-1">
+                <h4 className="font-bold text-white">Q: How does the 1-Year Karki Care warranty work?</h4>
+                <p className="text-slate-400">A: Every item includes a registered serial number seal. If any defect occurs within 1 year, we replace it free of charge.</p>
+              </div>
+              <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-1">
+                <h4 className="font-bold text-white">Q: Which digital wallets are accepted?</h4>
+                <p className="text-slate-400">A: We accept eSewa, Khalti, IME Pay, Visa/Mastercard, and Cash on Delivery (COD) across Nepal.</p>
+              </div>
+            </div>
+          )}
         </section>
 
-        {/* Related Products */}
-        <section className="mt-12">
-          <h2 className="text-xl font-extrabold text-slate-900 mb-6">You Might Also Like</h2>
+        {/* RELATED PRODUCTS SHOWCASE */}
+        <section className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-black text-white">Related Products You Might Like</h2>
+            <Link href="/shop" className="text-xs font-bold text-cyan-400 hover:underline">
+              View All 400 Items →
+            </Link>
+          </div>
+
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
             {allProducts
               .filter((p) => p.slug !== product.slug)
               .slice(0, 4)
-              .map((relatedProduct) => (
-                <Link key={relatedProduct.id} href={`/products/${relatedProduct.slug}`} legacyBehavior>
-                  <a className="group block rounded-2xl bg-white p-4 shadow-sm hover:shadow-md transition border border-slate-200">
-                    <div className="aspect-square bg-slate-50 rounded-xl mb-3 flex items-center justify-center text-4xl group-hover:scale-105 transition overflow-hidden">
-                      {relatedProduct.imageUrl || relatedProduct.image ? (
-                        <img src={relatedProduct.imageUrl || relatedProduct.image} alt={relatedProduct.name} className="w-full h-full object-cover" />
-                      ) : (
-                        '📦'
-                      )}
-                    </div>
-                    <h3 className="font-bold text-slate-900 text-xs group-hover:text-[#f57224] truncate">{relatedProduct.name}</h3>
-                    <p className="text-[11px] text-slate-400 truncate mt-0.5">{relatedProduct.description}</p>
-                    <p className="text-base font-black text-[#f57224] mt-2">${relatedProduct.price}</p>
-                  </a>
+              .map((related) => (
+                <Link key={related.id} href={`/products/${related.slug}`} className="group block rounded-2xl bg-slate-900/90 p-4 border border-indigo-950 hover:border-cyan-400 transition-all duration-300 hover:-translate-y-1 space-y-2 backdrop-blur-md">
+                  <div className="aspect-square bg-slate-950 rounded-xl flex items-center justify-center text-4xl overflow-hidden border border-slate-800">
+                    {related.imageUrl || related.image ? (
+                      <img src={related.imageUrl || related.image} alt={related.name} className="w-full h-full object-cover group-hover:scale-105 transition" />
+                    ) : (
+                      '📦'
+                    )}
+                  </div>
+                  <h3 className="font-bold text-white text-xs truncate group-hover:text-cyan-400 transition">{related.name}</h3>
+                  <p className="text-base font-black text-cyan-400">${related.price}</p>
                 </Link>
               ))}
           </div>
         </section>
+
       </main>
 
       <Footer />
