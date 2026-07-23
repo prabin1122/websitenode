@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { showToast } from '../components/toast';
-import CartAddedModal from '../components/cart-added-modal';
+import CartNotificationBanner from '../components/cart-added-modal';
 
 export interface CartItem {
   id: string;
@@ -64,15 +63,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     setRecentlyAddedItem(newItem);
     setIsModalOpen(true);
-
-    // Trigger rich cart toast notification
-    showToast(`Added "${newItem.name}" to cart!`, 'cart', {
-      name: newItem.name,
-      price: newItem.price,
-      image: newItem.imageUrl || newItem.image,
-      quantity: newItem.quantity || 1,
-      slug: newItem.slug,
-    });
   };
 
   const removeItem = (id: string) => {
@@ -114,7 +104,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      <CartAddedModal
+      <CartNotificationBanner
         item={recentlyAddedItem}
         isOpen={isModalOpen}
         onClose={closeAddedModal}
