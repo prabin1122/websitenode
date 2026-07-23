@@ -11,7 +11,7 @@ interface CartAddedModalProps {
   cartSubtotal: number;
 }
 
-export default function CartAddedModal({
+export default function CartNotificationBanner({
   item,
   isOpen,
   onClose,
@@ -24,79 +24,59 @@ export default function CartAddedModal({
     setMounted(true);
   }, []);
 
+  // Auto hide after 4.5 seconds
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 4500);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, item, onClose]);
+
   if (!mounted || !isOpen || !item) return null;
 
-  const modalContent = (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md font-sans">
-      <div className="relative w-full max-w-md bg-slate-900 border-2 border-cyan-400 rounded-3xl p-6 shadow-2xl shadow-cyan-500/30 text-white space-y-5 animate-scale-up">
+  const bannerContent = (
+    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-[99999] w-[92%] max-w-lg pointer-events-auto font-sans">
+      <div className="rounded-2xl bg-slate-900/95 border-2 border-cyan-400 p-4 shadow-2xl shadow-cyan-500/20 text-white backdrop-blur-xl flex items-center justify-between gap-3 animate-slide-down">
         
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold transition w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700"
-        >
-          ✕
-        </button>
-
-        {/* Modal Header */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 flex items-center justify-center text-xl shrink-0">
-            ✓
-          </div>
-          <div>
-            <h3 className="text-lg font-black text-white">Product Added to Your Cart!</h3>
-            <p className="text-xs text-cyan-400 font-medium">Your TechMate cart has been updated.</p>
-          </div>
-        </div>
-
-        {/* Product Details Card */}
-        <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 flex items-center gap-4">
-          <div className="w-16 h-16 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden shrink-0 text-3xl">
+        {/* Left: Checkmark & Product Info */}
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center overflow-hidden shrink-0 text-xl">
             {item.imageUrl || item.image ? (
               <img src={item.imageUrl || item.image} alt={item.name} className="w-full h-full object-cover" />
             ) : (
-              '📦'
+              '🛒'
             )}
           </div>
 
-          <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-white text-sm truncate">{item.name}</h4>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-base font-black text-cyan-400">${item.price}</span>
-              <span className="text-xs text-slate-400 font-semibold bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
-                Qty: {item.quantity || 1}
-              </span>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-1.5 text-xs font-black text-cyan-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span>Cart Updated!</span>
             </div>
+            <p className="text-xs font-bold text-white truncate">{item.name}</p>
+            <p className="text-[11px] text-slate-400">
+              Subtotal: <span className="text-cyan-300 font-extrabold">${cartSubtotal.toFixed(2)}</span> ({cartTotalCount} items)
+            </p>
           </div>
         </div>
 
-        {/* Cart Summary Bar */}
-        <div className="bg-indigo-950/80 border border-indigo-800 rounded-2xl p-3.5 flex justify-between items-center text-xs">
-          <div>
-            <span className="text-slate-400 block text-[10px] uppercase font-bold">Total Cart Items</span>
-            <span className="text-white font-black text-sm">{cartTotalCount} Items</span>
-          </div>
-          <div className="text-right">
-            <span className="text-slate-400 block text-[10px] uppercase font-bold">Subtotal</span>
-            <span className="text-cyan-400 font-black text-base">${cartSubtotal.toFixed(2)}</span>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="space-y-2 pt-1">
+        {/* Right: View Cart & Close */}
+        <div className="flex items-center gap-2 shrink-0">
           <Link
             href="/cart"
             onClick={onClose}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-cyan-500 hover:scale-[1.02] text-slate-950 font-black text-xs transition shadow-xl uppercase tracking-wider flex items-center justify-center gap-2 border border-cyan-400"
+            className="rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:scale-105 px-3.5 py-2 text-slate-950 font-black text-xs transition shadow-md uppercase tracking-wider flex items-center gap-1"
           >
-            <span>🛒 VIEW CART & CHECKOUT ({cartTotalCount})</span>
+            <span>View Cart 🛒</span>
           </Link>
 
           <button
             onClick={onClose}
-            className="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition border border-slate-700"
+            className="text-slate-400 hover:text-white text-sm font-bold p-1 transition"
           >
-            🛍️ Continue Shopping
+            ✕
           </button>
         </div>
 
@@ -104,5 +84,5 @@ export default function CartAddedModal({
     </div>
   );
 
-  return ReactDOM.createPortal(modalContent, document.body);
+  return ReactDOM.createPortal(bannerContent, document.body);
 }
