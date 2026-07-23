@@ -22,9 +22,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       price: product.price,
       quantity: 1,
       slug: product.slug,
+      imageUrl: product.imageUrl || product.image,
     });
-
-    showToast(`⚡ Added "${product.name}" to your TechMate cart!`, 'success');
   };
 
   const discountPercent = Math.min(35, 15 + (product.name.length % 20));

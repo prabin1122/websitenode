@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { showToast } from '../components/toast';
 
-interface CartItem {
+export interface CartItem {
   id: string;
   name: string;
   price: string;
   quantity: number;
   slug: string;
+  imageUrl?: string;
+  image?: string;
 }
 
 interface CartContextType {
@@ -52,6 +55,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         );
       }
       return [...prev, newItem];
+    });
+
+    // Trigger rich cart notification
+    showToast(`Added "${newItem.name}" to cart!`, 'cart', {
+      name: newItem.name,
+      price: newItem.price,
+      image: newItem.imageUrl || newItem.image,
+      quantity: newItem.quantity || 1,
+      slug: newItem.slug,
     });
   };
 
