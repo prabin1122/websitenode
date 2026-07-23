@@ -428,15 +428,19 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = INITIAL_400_PRODUCTS.flatMap((product) => [
+    { params: { slug: product.slug } },
+    { params: { slug: product.id } },
+  ]);
   return {
-    paths: INITIAL_400_PRODUCTS.map((product) => ({ params: { slug: product.slug } })),
+    paths,
     fallback: 'blocking',
   };
 };
 
 export const getStaticProps: GetStaticProps<ProductPageProps> = async (context) => {
   const slug = context.params?.slug as string;
-  const product = INITIAL_400_PRODUCTS.find((p) => p.slug === slug || p.id === slug);
+  const product = INITIAL_400_PRODUCTS.find((p) => p.slug === slug || p.id === slug || p.slug.toLowerCase() === slug.toLowerCase());
 
   return {
     props: {

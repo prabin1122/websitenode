@@ -24,17 +24,18 @@ export default function ProductCard({ product }: ProductCardProps) {
       slug: product.slug,
     });
 
-    showToast(`⚡ Added "${product.name}" to your Karki Store cart!`, 'success');
+    showToast(`⚡ Added "${product.name}" to your TechMate cart!`, 'success');
   };
 
   const discountPercent = Math.min(35, 15 + (product.name.length % 20));
   const originalPrice = (parseFloat(product.price) * (1 + discountPercent / 100)).toFixed(2);
 
   return (
-    <div
+    <Link
+      href={`/products/${product.slug}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-400/80 shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-500/10 flex flex-col justify-between overflow-hidden font-sans backdrop-blur-sm"
+      className="group relative rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-400/80 shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-500/10 flex flex-col justify-between overflow-hidden font-sans backdrop-blur-sm cursor-pointer"
     >
       {/* Top Animated Badge */}
       <div className="relative aspect-square w-full bg-slate-950 flex items-center justify-center overflow-hidden border-b border-slate-800/80">
@@ -66,7 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         >
           <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 space-y-2">
             <p className="text-xs text-slate-200 line-clamp-2 leading-relaxed">
-              {product.description || 'Authentic tech product verified by Karki Store. Features enterprise-grade durability and manufacturer warranty.'}
+              {product.description || 'Authentic tech product verified by TechMate Nepal. Features enterprise-grade durability and manufacturer warranty.'}
             </p>
 
             <div className="flex items-center justify-between text-[11px] font-semibold pt-1 border-t border-slate-800">
@@ -85,12 +86,9 @@ export default function ProductCard({ product }: ProductCardProps) {
               >
                 ⚡ Quick Add
               </button>
-              <Link
-                href={`/products/${product.slug}`}
-                className="rounded-xl bg-slate-800 hover:bg-slate-700 px-3 py-2 text-slate-200 text-xs font-bold transition flex items-center justify-center"
-              >
-                View
-              </Link>
+              <span className="rounded-xl bg-slate-800 hover:bg-slate-700 px-3 py-2 text-cyan-400 text-xs font-bold transition flex items-center justify-center">
+                View Details →
+              </span>
             </div>
           </div>
         </div>
@@ -103,7 +101,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             {product.name}
           </h3>
           <p className="text-xs text-slate-400 line-clamp-1 mt-0.5">
-            Official Warranty • Express Shipping
+            TechMate Care Warranty • Express Shipping
           </p>
         </div>
 
@@ -123,6 +121,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

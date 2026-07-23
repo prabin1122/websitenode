@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import ProductCard from '../components/product-card';
 import Navigation from '../components/navigation';
 import Footer from '../components/footer';
@@ -16,39 +16,30 @@ import {
   PackageDeliveryLottieScene,
   CustomerSatisfactionLottieScene,
 } from '../components/lottie-scenes';
-import {
-  TechHeroIllustration,
-  NepalExpressShippingIllustration,
-  KarkiWarrantyShieldIllustration,
-  PaymentSecurityIllustration,
-} from '../components/svg-illustrations';
 import { showToast } from '../components/toast';
 import { useCart } from '../context/cart';
 import { INITIAL_400_PRODUCTS, Product } from '../data/products';
 import { getSiteCMS, SiteCMS } from '../data/cms';
 
-const KARKI_CATEGORIES = [
-  { name: 'Audio & Sound', icon: '🎧', count: '70 Items' },
-  { name: 'Cameras & Tech', icon: '📷', count: '50 Items' },
-  { name: 'Keyboards & Mice', icon: '⌨️', count: '70 Items' },
-  { name: 'Hubs & Power', icon: '🔌', count: '60 Items' },
-  { name: 'Monitors & Displays', icon: '🖥️', count: '50 Items' },
+const TECHMATE_CATEGORIES = [
+  { name: 'All Products', icon: '🛍️', count: '400 Items' },
+  { name: 'Audio', icon: '🎧', count: '70 Items' },
+  { name: 'Cameras', icon: '📷', count: '50 Items' },
+  { name: 'Keyboards', icon: '⌨️', count: '70 Items' },
+  { name: 'Hubs', icon: '🔌', count: '60 Items' },
+  { name: 'Monitors', icon: '🖥️', count: '50 Items' },
   { name: 'Smartwatches', icon: '⌚', count: '50 Items' },
-  { name: 'Accessories & Gadgets', icon: '💡', count: '50 Items' },
-];
-
-const KARKI_BRANDS = [
-  { name: 'Sony Audio', badge: '100% Genuine', logo: '🎧' },
-  { name: 'Logitech Gear', badge: 'Karki Official', logo: '⌨️' },
-  { name: 'Anker Power', badge: '1-Yr Warranty', logo: '⚡' },
-  { name: 'Samsung Tech', badge: 'Free Delivery', logo: '📱' },
+  { name: 'Gadgets', icon: '💡', count: '50 Items' },
 ];
 
 const Home: NextPage = () => {
   const [productList, setProductList] = useState<Product[]>(INITIAL_400_PRODUCTS);
-  const [activeCategory, setActiveCategory] = useState('Audio & Sound');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All Products');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortBy, setSortBy] = useState<'featured' | 'low-high' | 'high-low' | 'rating'>('featured');
   const [cms, setCms] = useState<SiteCMS>(getSiteCMS());
   const { addItem } = useCart();
+  const [showInteractiveDemo, setShowInteractiveDemo] = useState(false);
 
   useEffect(() => {
     setCms(getSiteCMS());
@@ -72,376 +63,386 @@ const Home: NextPage = () => {
     }
   }, []);
 
-  const flashItems = productList.slice(0, 4).map((item, idx) => ({
-    id: item.id,
-    name: item.name,
-    price: item.price,
-    originalPrice: (parseFloat(item.price) * 1.3).toFixed(2),
-    discount: `-${20 + (idx * 3)}%`,
-    soldPercent: 70 + (idx * 6),
-    image: item.imageUrl || item.image || '',
-  }));
+  // Filter & Sort Products
+  const filteredProducts = useMemo(() => {
+    let result = [...productList];
 
-  const handleFlashQuickAdd = (item: any) => {
-    addItem({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      quantity: 1,
-      slug: item.id,
-    });
-    showToast(`⚡ Added "${item.name}" to your Karki Store cart!`, 'success');
-  };
+    if (selectedCategory !== 'All Products') {
+      result = result.filter((p) => p.category.toLowerCase().includes(selectedCategory.toLowerCase()));
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter((p) => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+    }
+
+    if (sortBy === 'low-high') {
+      result.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortBy === 'high-low') {
+      result.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    } else if (sortBy === 'rating') {
+      result.sort((a, b) => (b.rating || 4.5) - (a.rating || 4.5));
+    }
+
+    return result;
+  }, [productList, selectedCategory, searchQuery, sortBy]);
+
+  const flashItems = productList.slice(0, 4);
+  const trendingAudio = productList.filter((p) => p.category === 'Audio').slice(0, 4);
+  const trendingKeyboards = productList.filter((p) => p.category === 'Keyboards').slice(0, 4);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative overflow-x-hidden">
       <Head>
-        <title>{cms.heroTitle} | Karki Store Tech Marketplace</title>
-        <meta name="description" content="Shop 400+ genuine tech products, audio gear, mechanical keyboards, and 4K webcams at Karki Store Nepal." />
+        <title>TechMate Nepal | #1 E-Commerce Tech Marketplace (400+ Products)</title>
+        <meta name="description" content="Shop 400+ genuine headphones, mechanical keyboards, 4K webcams & electronics in Nepal with eSewa & Khalti." />
       </Head>
 
-      {/* Interactive Background Canvas */}
       <ParticleCanvas />
       <LivePurchaseTicker />
-
       <Navigation />
 
-      <main className="flex-1 relative z-10 space-y-6">
-        {/* Hero Showcase */}
-        <section className="mx-auto max-w-7xl px-4 pt-6">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-            {/* Left Category Sidebar */}
-            <div className="lg:col-span-1 bg-slate-900/90 rounded-2xl shadow-2xl border border-indigo-950 p-3 hidden lg:block backdrop-blur-md">
-              <p className="text-xs font-black text-cyan-400 uppercase tracking-wider px-3 py-2 border-b border-slate-800 flex justify-between items-center">
-                <span>Categories</span>
-                <span className="bg-indigo-900 text-indigo-300 text-[10px] px-2 py-0.5 rounded font-bold">400 Items</span>
-              </p>
-              <ul className="space-y-1 mt-2">
-                {KARKI_CATEGORIES.map((cat, idx) => (
-                  <li key={idx}>
-                    <button
-                      onClick={() => setActiveCategory(cat.name)}
-                      className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold flex items-center justify-between transition ${
-                        activeCategory === cat.name
-                          ? 'bg-indigo-900/80 text-cyan-400 border border-indigo-700/50 shadow-md'
-                          : 'text-slate-300 hover:bg-slate-800'
-                      }`}
-                    >
-                      <span className="flex items-center gap-2 truncate">
-                        <span>{cat.icon}</span>
-                        <span>{cat.name}</span>
-                      </span>
-                      <span className="text-[10px] text-slate-500 font-normal">›</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+      <main className="flex-1 relative z-10 space-y-10 py-6">
 
-            {/* Main Hero Showcase */}
-            <div className="lg:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="md:col-span-2 rounded-3xl bg-gradient-to-r from-indigo-950 via-slate-900 to-slate-950 text-white p-8 md:p-12 shadow-2xl relative overflow-hidden border border-indigo-800/60 flex flex-col md:flex-row justify-between items-center gap-6 group min-h-[340px]">
-                <div className="relative z-10 space-y-4 max-w-md">
-                  <span className="bg-cyan-500/20 text-cyan-300 text-[10px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-cyan-400/30 inline-flex items-center gap-1.5 shadow-md">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                    KARKI STORE OFFICIAL LAUNCH
+        {/* 🚀 TOP HERO BANNER: PRODUCT FOCUS */}
+        <section className="mx-auto max-w-7xl px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            
+            {/* Left 8-Cols: Main Deal Showcase */}
+            <div className="lg:col-span-8 rounded-3xl bg-gradient-to-r from-indigo-950 via-slate-900 to-slate-950 border border-indigo-800/80 p-8 sm:p-12 shadow-2xl flex flex-col justify-between relative overflow-hidden group">
+              
+              <div className="space-y-4 max-w-xl relative z-10">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="bg-cyan-500 text-slate-950 text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                    ⚡ MEGA TECH SALE 2026
                   </span>
-
-                  <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight text-white">
-                    {cms.heroTitle}
-                  </h1>
-
-                  <p className="text-sm text-slate-300 font-normal leading-relaxed">
-                    {cms.heroSubtitle}
-                  </p>
-
-                  <div className="pt-2">
-                    <Link
-                      href="/shop"
-                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 via-cyan-600 to-indigo-600 px-8 py-3.5 font-black text-white transition-all duration-500 text-xs shadow-2xl tracking-wider uppercase border border-cyan-400/30 hover:scale-105"
-                    >
-                      <span>{cms.heroCtaText}</span>
-                    </Link>
-                  </div>
+                  <span className="bg-emerald-500/20 text-emerald-300 text-[11px] font-bold px-3 py-1 rounded-full border border-emerald-500/40">
+                    ● 400+ Items Available
+                  </span>
                 </div>
 
-                <div className="relative z-10 hidden sm:block">
-                  <TechHeroIllustration />
-                </div>
-              </div>
+                <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight">
+                  Supercharge Your Workspace With <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">TechMate Genuine Tech</span>
+                </h1>
 
-              {/* Right Interactive Widgets */}
-              <div className="space-y-4">
-                <div className="bg-slate-900/90 p-5 rounded-2xl border border-indigo-950 shadow-xl space-y-2 backdrop-blur-md hover:border-cyan-500/50 transition">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl border border-cyan-500/20">
-                      🚚
-                    </div>
-                    <div>
-                      <p className="font-bold text-white text-sm">Nepalwide Express</p>
-                      <p className="text-xs text-slate-400">Free delivery on orders $50+</p>
-                    </div>
-                  </div>
-                  <Link href="/warranty" className="block w-full text-center rounded-xl bg-indigo-950 text-cyan-400 py-2 font-bold text-xs hover:bg-indigo-900 transition border border-indigo-800">
-                    Claim Shipping Voucher
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  Fast 24-hour delivery across Kathmandu Valley & 77 districts in Nepal. Official manufacturer serial warranty with eSewa & Khalti digital payments.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <Link
+                    href="/shop"
+                    className="rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:scale-105 px-8 py-3.5 font-black text-slate-950 text-xs transition shadow-2xl uppercase tracking-wider border border-cyan-400"
+                  >
+                    SHOP ALL 400 PRODUCTS NOW →
                   </Link>
-                </div>
-
-                <div className="bg-slate-900/90 p-5 rounded-2xl border border-indigo-950 shadow-xl space-y-2 backdrop-blur-md hover:border-amber-500/50 transition">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl border border-amber-500/20">
-                      🛡️
-                    </div>
-                    <div>
-                      <p className="font-bold text-white text-sm">Karki Care Warranty</p>
-                      <p className="text-xs text-slate-400">100% Authentic Guarantee</p>
-                    </div>
-                  </div>
-                  <Link href="/warranty" className="block w-full text-center rounded-xl bg-amber-950/60 text-amber-400 py-2 font-bold text-xs hover:bg-amber-900/60 transition border border-amber-800/50">
-                    Learn Protection Terms
-                  </Link>
+                  <a
+                    href="#flash-sale"
+                    className="rounded-xl bg-slate-900 hover:bg-slate-800 px-6 py-3.5 text-cyan-300 font-bold text-xs transition border border-slate-800"
+                  >
+                    ⚡ View Flash Deals
+                  </a>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
 
-        {/* 🏔️ DYNAMIC ANIMATED HIMALAYAN KATHMANDU LANDSCAPE SECTION */}
-        <section className="mx-auto max-w-7xl px-4 py-2">
-          <LandscapeAnimation />
-        </section>
-
-        {/* 🏃‍♂️ CONTINUOUS HUMAN WALKING ANIMATION TRACK */}
-        <section className="mx-auto max-w-7xl px-4 py-2">
-          <HumanWalkingJourney />
-        </section>
-
-        {/* 🎬 ANIMATED CHARACTER MOVIE THEATER */}
-        <section className="mx-auto max-w-7xl px-4 py-2">
-          <CharacterMovieTheater />
-        </section>
-
-        {/* ⚡ REAL-TIME CUSTOMER ORDER & DELIVERY MAP */}
-        <section className="mx-auto max-w-7xl px-4 py-2">
-          <LiveFulfillmentMap />
-        </section>
-
-        {/* 📊 Customer Trust Metrics Bar */}
-        <section className="mx-auto max-w-7xl px-4 py-2">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-900/90 rounded-2xl p-6 border border-indigo-950 shadow-xl text-center backdrop-blur-md">
-            <div>
-              <p className="text-2xl font-black text-cyan-400">50,000+</p>
-              <p className="text-xs text-slate-400 mt-0.5">Happy Tech Buyers in Nepal</p>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-indigo-400">400+</p>
-              <p className="text-xs text-slate-400 mt-0.5">Active Tech Catalog Items</p>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-amber-400">77 Districts</p>
-              <p className="text-xs text-slate-400 mt-0.5">Express Postal Delivery</p>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-emerald-400">99.8%</p>
-              <p className="text-xs text-slate-400 mt-0.5">On-Time Fulfillment Rate</p>
-            </div>
-          </div>
-        </section>
-
-        {/* 🛍️ Live Nepal Order & Express Delivery Journey */}
-        <section className="mx-auto max-w-7xl px-4 py-4">
-          <div className="text-center mb-8">
-            <span className="text-xs font-black text-cyan-400 uppercase tracking-widest block mb-1">
-              AUTOMATED FULFILLMENT PIPELINE
-            </span>
-            <h2 className="text-3xl font-black text-white">How Orders Travel From Kathmandu To Your Door</h2>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            <div className="rounded-3xl bg-slate-900/90 p-6 border border-indigo-950 shadow-2xl flex flex-col items-center text-center space-y-4 backdrop-blur-md hover:border-cyan-400/60 transition duration-300">
-              <PeopleBuyingLottieScene />
-              <span className="bg-cyan-500/20 text-cyan-300 text-[10px] font-black px-3 py-1 rounded-full border border-cyan-400/30">
-                STEP 1 • DIGITAL ORDER
-              </span>
-              <h3 className="text-lg font-black text-white">Customers Buy Online</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Choose from 400+ genuine tech products and checkout instantly using eSewa, Khalti, IME Pay, or Cash on Delivery.
-              </p>
+              {/* Decorative Subtle Grid */}
+              <div className="absolute right-0 bottom-0 top-0 w-1/3 opacity-20 pointer-events-none bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
             </div>
 
-            <div className="rounded-3xl bg-slate-900/90 p-6 border border-indigo-950 shadow-2xl flex flex-col items-center text-center space-y-4 backdrop-blur-md hover:border-amber-400/60 transition duration-300">
-              <PackageDeliveryLottieScene />
-              <span className="bg-amber-500/20 text-amber-300 text-[10px] font-black px-3 py-1 rounded-full border border-amber-400/30">
-                STEP 2 • EXPRESS DISPATCH
-              </span>
-              <h3 className="text-lg font-black text-white">Express Courier Logistics</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Orders are packed at our Kathmandu hub and dispatched within 24 hours to all 77 Nepal districts with live SMS tracking.
-              </p>
-            </div>
-
-            <div className="rounded-3xl bg-slate-900/90 p-6 border border-indigo-950 shadow-2xl flex flex-col items-center text-center space-y-4 backdrop-blur-md hover:border-emerald-400/60 transition duration-300">
-              <CustomerSatisfactionLottieScene />
-              <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-black px-3 py-1 rounded-full border border-emerald-400/30">
-                STEP 3 • UNBOXING & WARRANTY
-              </span>
-              <h3 className="text-lg font-black text-white">Happy Delivery & Karki Care</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Enjoy 100% genuine tech backed by 1-year Karki Care replacement warranty and dedicated 24/7 helpline support.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* 🔥 Karki Flash Sale Section */}
-        <section className="mx-auto max-w-7xl px-4 py-4">
-          <div className="bg-slate-900/90 rounded-3xl p-6 shadow-2xl border border-indigo-950 backdrop-blur-md">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-6">
-              <div className="flex items-center gap-4">
-                <h2 className="text-xl font-black text-amber-400 flex items-center gap-2">
-                  <span className="animate-bounce">⚡</span> Karki Flash Sale
-                </h2>
-                <div className="flex items-center gap-1 text-xs font-bold text-slate-300 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
-                  <span>Ending in:</span>
-                  <span className="bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded text-[11px] font-mono font-black">05</span>:
-                  <span className="bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded text-[11px] font-mono font-black">18</span>:
-                  <span className="bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded text-[11px] font-mono font-black">42</span>
-                </div>
+            {/* Right 4-Cols: Daily Deal Featured Card */}
+            <div className="lg:col-span-4 rounded-3xl bg-slate-900/90 border border-indigo-950 p-6 flex flex-col justify-between shadow-2xl backdrop-blur-md space-y-4">
+              <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+                <span className="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                  🔥 Deal of the Day
+                </span>
+                <span className="bg-red-500/20 text-red-400 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-red-500/30">
+                  SAVE 30%
+                </span>
               </div>
-              <Link href="/shop" className="text-xs font-bold text-cyan-400 border border-cyan-500/40 px-4 py-2 rounded-xl hover:bg-cyan-500/10 transition">
-                VIEW ALL DEALS →
-              </Link>
-            </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
-              {flashItems.map((item) => (
-                <div key={item.id} className="rounded-2xl border border-slate-800 bg-slate-950 p-4 hover:border-cyan-400 transition-all duration-300 hover:-translate-y-1 space-y-2 group">
-                  <div className="aspect-square bg-slate-900 rounded-xl flex items-center justify-center text-5xl relative overflow-hidden border border-slate-800">
-                    {item.image ? (
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                    ) : (
-                      '📦'
-                    )}
-                    <span className="absolute top-2 right-2 bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-md shadow-md">
-                      {item.discount}
+              {productList[0] && (
+                <div className="space-y-3">
+                  <div className="aspect-square bg-slate-950 rounded-2xl flex items-center justify-center overflow-hidden border border-slate-800 relative group">
+                    <img
+                      src={productList[0].imageUrl || productList[0].image}
+                      alt={productList[0].name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    <span className="absolute bottom-2 left-2 bg-slate-950/90 text-cyan-400 text-[10px] font-bold px-2 py-1 rounded border border-slate-800">
+                      Stock: {productList[0].stock} Available
                     </span>
                   </div>
-                  <h3 className="font-bold text-white text-xs truncate group-hover:text-cyan-400 transition">{item.name}</h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-base font-black text-cyan-400">${item.price}</span>
-                    <span className="text-xs text-slate-500 line-through">${item.originalPrice}</span>
+
+                  <div>
+                    <h3 className="font-black text-white text-sm truncate">{productList[0].name}</h3>
+                    <p className="text-xs text-slate-400 line-clamp-1">{productList[0].description}</p>
                   </div>
-                  
-                  <div className="space-y-1">
-                    <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                      <div className="bg-gradient-to-r from-amber-500 to-cyan-500 h-full rounded-full" style={{ width: `${item.soldPercent}%` }} />
+
+                  <div className="flex items-baseline justify-between pt-1">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xl font-black text-cyan-400">${productList[0].price}</span>
+                      <span className="text-xs text-slate-500 line-through">${(parseFloat(productList[0].price) * 1.3).toFixed(2)}</span>
                     </div>
-                    <p className="text-[10px] text-slate-400 font-semibold">{item.soldPercent}% Claimed</p>
+                    <button
+                      onClick={() => {
+                        addItem({
+                          id: productList[0].id,
+                          name: productList[0].name,
+                          price: productList[0].price,
+                          quantity: 1,
+                          slug: productList[0].slug,
+                        });
+                        showToast(`⚡ Added "${productList[0].name}" to cart!`, 'success');
+                      }}
+                      className="rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 text-xs font-black transition shadow-lg"
+                    >
+                      + Quick Buy
+                    </button>
                   </div>
-
-                  <button
-                    onClick={() => handleFlashQuickAdd(item)}
-                    className="w-full rounded-xl bg-indigo-600 py-2.5 text-white text-xs font-bold hover:bg-indigo-500 transition shadow-md uppercase tracking-wider"
-                  >
-                    + Add to Cart
-                  </button>
                 </div>
-              ))}
+              )}
             </div>
+
           </div>
         </section>
 
-        {/* 🌟 Why Choose Karki Store Nepal? */}
-        <section className="mx-auto max-w-7xl px-4 py-4">
-          <div className="text-center mb-8">
-            <span className="text-xs font-black text-cyan-400 uppercase tracking-widest block mb-1">NEPAL'S PREMIER TECH STORE</span>
-            <h2 className="text-3xl font-black text-white">Why Shop At Karki Store?</h2>
-          </div>
+        {/* 🏷️ INTERACTIVE CATEGORY BAR & FILTER CONTROLS */}
+        <section className="mx-auto max-w-7xl px-4">
+          <div className="bg-slate-900/90 rounded-2xl p-4 border border-indigo-950 shadow-xl backdrop-blur-md space-y-4">
+            
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              {/* Category Pills */}
+              <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
+                {TECHMATE_CATEGORIES.map((cat, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedCategory(cat.name)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center gap-2 ${
+                      selectedCategory === cat.name
+                        ? 'bg-cyan-500 text-slate-950 font-black shadow-lg shadow-cyan-500/20'
+                        : 'bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                    }`}
+                  >
+                    <span>{cat.icon}</span>
+                    <span>{cat.name}</span>
+                  </button>
+                ))}
+              </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            <div className="rounded-3xl bg-slate-900/90 p-6 border border-indigo-950 shadow-2xl flex flex-col items-center text-center space-y-3 backdrop-blur-md hover:border-cyan-400/60 transition">
-              <NepalExpressShippingIllustration />
-              <h3 className="text-lg font-black text-white">77-District Express Shipping</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Fast courier dispatch to Kathmandu, Pokhara, Biratnagar, Chitwan, and all 77 districts with live SMS tracking.
-              </p>
+              {/* Instant Filter & Sort Controls */}
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <input
+                  type="text"
+                  placeholder="Filter 400 products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="rounded-xl bg-slate-950 text-slate-200 border border-slate-800 px-3.5 py-2 text-xs font-medium focus:border-cyan-400 outline-none w-full sm:w-48"
+                />
+
+                <select
+                  value={sortBy}
+                  onChange={(e: any) => setSortBy(e.target.value)}
+                  className="rounded-xl bg-slate-950 text-slate-200 border border-slate-800 px-3 py-2 text-xs font-bold focus:border-cyan-400 outline-none"
+                >
+                  <option value="featured">Sort: Featured</option>
+                  <option value="low-high">Price: Low to High</option>
+                  <option value="high-low">Price: High to Low</option>
+                  <option value="rating">Top Rated ⭐</option>
+                </select>
+              </div>
             </div>
 
-            <div className="rounded-3xl bg-slate-900/90 p-6 border border-indigo-950 shadow-2xl flex flex-col items-center text-center space-y-3 backdrop-blur-md hover:border-amber-400/60 transition">
-              <KarkiWarrantyShieldIllustration />
-              <h3 className="text-lg font-black text-white">100% Genuine & Karki Warranty</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Every product comes with official manufacturer serial numbers and 1-year Karki Care replacement guarantee.
-              </p>
-            </div>
-
-            <div className="rounded-3xl bg-slate-900/90 p-6 border border-indigo-950 shadow-2xl flex flex-col items-center text-center space-y-3 backdrop-blur-md hover:border-indigo-400/60 transition">
-              <PaymentSecurityIllustration />
-              <h3 className="text-lg font-black text-white">Local Digital Wallet Payments</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Seamless instant checkout with eSewa, Khalti, IME Pay, Cash on Delivery (COD), and Visa/Mastercard.
-              </p>
-            </div>
           </div>
         </section>
 
-        {/* 🏬 KarkiMall */}
-        <section className="mx-auto max-w-7xl px-4 py-4">
-          <div className="bg-slate-900/90 rounded-3xl p-6 shadow-2xl border border-indigo-950 backdrop-blur-md">
-            <div className="flex items-center justify-between mb-6 border-b border-slate-800 pb-3">
+        {/* ⚡ FLASH DEALS SECTION */}
+        <section id="flash-sale" className="mx-auto max-w-7xl px-4">
+          <div className="bg-slate-900/90 rounded-3xl p-6 sm:p-8 border border-indigo-950 shadow-2xl backdrop-blur-md space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
               <div className="flex items-center gap-3">
-                <h2 className="text-xl font-black text-white">KarkiMall</h2>
-                <span className="bg-indigo-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">100% Genuine</span>
+                <h2 className="text-xl font-black text-amber-400 flex items-center gap-2">
+                  <span className="animate-bounce">⚡</span> TechMate Flash Deals
+                </h2>
+                <span className="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-amber-500/30">
+                  Limited Nepal Stock
+                </span>
               </div>
               <Link href="/shop" className="text-xs font-bold text-cyan-400 hover:underline">
-                View Brand Stores →
+                View All 400 Products →
               </Link>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
-              {KARKI_BRANDS.map((brand, idx) => (
-                <div key={idx} className="rounded-2xl border border-slate-800 bg-slate-950 p-5 text-center hover:border-cyan-400/60 transition-all duration-300 hover:scale-105">
-                  <div className="text-4xl mb-2">{brand.logo}</div>
-                  <h3 className="font-bold text-white text-sm mb-1">{brand.name}</h3>
-                  <span className="inline-block bg-indigo-950 text-cyan-300 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-indigo-800">
-                    {brand.badge}
-                  </span>
-                </div>
+              {flashItems.map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           </div>
         </section>
 
-        {/* 🎯 "Just For You" Interactive Grid */}
-        <section className="mx-auto max-w-7xl px-4 py-6">
-          <div className="flex justify-between items-end mb-6">
-            <div>
-              <h2 className="text-2xl font-black text-white mb-1">Just For You</h2>
-              <p className="text-xs text-slate-400">Curated tech selection from Karki Store's 400 active products</p>
+        {/* 🎧 CATEGORY SHOWCASE 1: AUDIO & SOUND */}
+        <section className="mx-auto max-w-7xl px-4">
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <h2 className="text-2xl font-black text-white">🎧 Audio & Studio Gear</h2>
+                <span className="bg-indigo-950 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full border border-indigo-800">
+                  70 Items
+                </span>
+              </div>
+              <Link href="/shop?category=Audio" className="text-xs font-bold text-cyan-400 hover:underline">
+                Explore Audio Catalog →
+              </Link>
             </div>
-            <Link
-              href="/shop"
-              className="rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white px-5 py-2.5 text-xs font-extrabold hover:from-indigo-500 hover:to-cyan-500 transition shadow-md uppercase tracking-wider"
-            >
-              Shop 400 Products →
-            </Link>
-          </div>
 
-          <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {productList.slice(0, 16).map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-
-          <div className="mt-10 text-center pb-8">
-            <Link
-              href="/shop"
-              className="inline-block rounded-xl border border-indigo-600 bg-indigo-950 text-cyan-400 px-8 py-3.5 text-xs font-extrabold hover:bg-indigo-900 transition shadow-2xl uppercase tracking-wider"
-            >
-              BROWSE ALL 400 ITEMS IN KARKI STORE →
-            </Link>
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+              {trendingAudio.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
           </div>
         </section>
+
+        {/* ⌨️ CATEGORY SHOWCASE 2: MECHANICAL KEYBOARDS */}
+        <section className="mx-auto max-w-7xl px-4">
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <h2 className="text-2xl font-black text-white">⌨️ Mechanical Keyboards & Mice</h2>
+                <span className="bg-indigo-950 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full border border-indigo-800">
+                  70 Items
+                </span>
+              </div>
+              <Link href="/shop?category=Keyboards" className="text-xs font-bold text-cyan-400 hover:underline">
+                Explore Keyboards →
+              </Link>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+              {trendingKeyboards.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 🎯 MAIN 400-PRODUCT MARKETPLACE GRID */}
+        <section className="mx-auto max-w-7xl px-4">
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-800 pb-4">
+              <div>
+                <h2 className="text-2xl font-black text-white">
+                  {selectedCategory === 'All Products' ? 'All 400 Products Marketplace' : `${selectedCategory} Catalog`}
+                </h2>
+                <p className="text-xs text-slate-400">
+                  Showing {filteredProducts.length} items • Authentic quality guaranteed by TechMate Care
+                </p>
+              </div>
+              <span className="text-xs font-bold text-cyan-400 bg-slate-900 px-3.5 py-1.5 rounded-full border border-slate-800">
+                Page 1 of {Math.ceil(filteredProducts.length / 16)}
+              </span>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {filteredProducts.slice(0, 20).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            <div className="text-center pt-6">
+              <Link
+                href="/shop"
+                className="inline-block rounded-2xl bg-gradient-to-r from-indigo-600 via-cyan-600 to-indigo-600 hover:scale-105 px-10 py-4 font-black text-white text-xs transition shadow-2xl uppercase tracking-wider border border-cyan-400/40"
+              >
+                BROWSE COMPLETE 400 PRODUCTS IN SHOP CATALOG →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 🚚 WHY TECHMATE NEPAL (BENEFITS BAR) */}
+        <section className="mx-auto max-w-7xl px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-900/90 rounded-3xl p-6 sm:p-8 border border-indigo-950 shadow-2xl backdrop-blur-md">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-3xl border border-cyan-500/20 shrink-0">
+                🚚
+              </div>
+              <div>
+                <h3 className="font-black text-white text-sm">77 Districts Delivery</h3>
+                <p className="text-xs text-slate-400">Express courier dispatch from Kathmandu with live SMS tracking.</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-3xl border border-amber-500/20 shrink-0">
+                🛡️
+              </div>
+              <div>
+                <h3 className="font-black text-white text-sm">TechMate Care Warranty</h3>
+                <p className="text-xs text-slate-400">100% Genuine products with 1-Year replacement guarantee.</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-3xl border border-indigo-500/20 shrink-0">
+                💳
+              </div>
+              <div>
+                <h3 className="font-black text-white text-sm">eSewa & Khalti Checkout</h3>
+                <p className="text-xs text-slate-400">Instant digital wallet payment or Cash on Delivery across Nepal.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 🎬 BOTTOM SECTION: EXPANDABLE INTERACTIVE DEMO & ANIMATION HUB */}
+        <section className="mx-auto max-w-7xl px-4 pt-6">
+          <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 text-center space-y-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-left">
+                <h3 className="text-lg font-black text-white flex items-center gap-2">
+                  <span>🎬 Interactive Tech Demos & Kathmandu Simulation</span>
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Explore 60 FPS physics engines, Himalayan landscape, and live order tracking simulations.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowInteractiveDemo(!showInteractiveDemo)}
+                className="rounded-xl bg-slate-800 hover:bg-slate-700 px-5 py-2.5 text-cyan-400 font-bold text-xs transition border border-slate-700 whitespace-nowrap"
+              >
+                {showInteractiveDemo ? '▲ Hide Interactive Demos' : '▼ Expand Interactive Demos'}
+              </button>
+            </div>
+
+            {showInteractiveDemo && (
+              <div className="space-y-8 pt-6 border-t border-slate-800 text-left">
+                <div>
+                  <h4 className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-3">1. Himalayan Kathmandu Landscape Simulation</h4>
+                  <LandscapeAnimation />
+                </div>
+
+                <div>
+                  <h4 className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-3">2. 60 FPS Human Walking Track</h4>
+                  <HumanWalkingJourney />
+                </div>
+
+                <div>
+                  <h4 className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-3">3. Character Movie Theater</h4>
+                  <CharacterMovieTheater />
+                </div>
+
+                <div>
+                  <h4 className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-3">4. Nepal Live Fulfillment Map</h4>
+                  <LiveFulfillmentMap />
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
       </main>
 
       <Footer />

@@ -51,7 +51,7 @@ export interface SiteCMS {
   returnsTitle: string;
   returnsContent: string;
 
-  // Karki Care Warranty
+  // TechMate Care Warranty
   warrantyTitle: string;
   warrantyContent: string;
 
@@ -72,35 +72,35 @@ export interface SiteCMS {
 
 export const DEFAULT_SITE_CMS: SiteCMS = {
   // Global & Header
-  announcementText: '⚡ Welcome to Karki Store Nepal — Official Tech Marketplace • Free Express Delivery on orders over $50',
+  announcementText: '⚡ Welcome to TechMate Nepal — Official Tech Marketplace • Free Express Delivery on orders over $50',
   supportPhone: '+977 1-4000000 / +977 9800000000',
-  supportEmail: 'support@karkistore.com',
-  officeAddress: 'Karki Store Tower, New Road, Kathmandu, Nepal',
+  supportEmail: 'support@techmate.com.np',
+  officeAddress: 'TechMate Tower, New Road, Kathmandu, Nepal',
   workingHours: 'Sunday - Friday: 9:00 AM - 8:00 PM',
 
   // Home Page
-  heroTitle: "Nepal's #1 Tech Marketplace",
+  heroTitle: "Nepal's #1 TechMate Marketplace",
   heroSubtitle: 'Shop over 400+ genuine headphones, 4K webcams, RGB mechanical keyboards, and smart gadgets.',
-  heroCtaText: 'EXPLORE CATALOG (400) →',
-  promoTitle: 'Supercharge Your Productivity Today',
-  promoSubtitle: 'Limited-time deal on mechanical keyboards, 4K webcams, and ergonomic accessories.',
+  heroCtaText: 'EXPLORE TECHMATE CATALOG (400) →',
+  promoTitle: 'Supercharge Your Tech Workspace Today',
+  promoSubtitle: 'Limited-time deals on mechanical keyboards, 4K webcams, and ergonomic accessories.',
 
   // Shop Page
-  shopTitle: 'Karki Store 400+ Tech Catalog',
+  shopTitle: 'TechMate 400+ Electronics Catalog',
   shopSubtitle: "Browse Nepal's largest genuine tech inventory with live stock tracking and instant delivery.",
 
   // About Page
-  aboutTitle: 'About Karki Store Nepal',
+  aboutTitle: 'About TechMate Nepal',
   aboutSubtitle: 'Empowering creators, developers, and tech enthusiasts across Nepal with genuine electronics.',
-  aboutMission: 'At Karki Store, our mission is to deliver authentic, enterprise-grade technology to every district in Nepal. We curate over 400 products with strict quality assurance and dedicated post-purchase warranty support.',
+  aboutMission: 'At TechMate, our mission is to deliver authentic, enterprise-grade technology to every district in Nepal. We curate over 400 products with strict quality assurance and dedicated post-purchase warranty support.',
 
   // Contact Page
-  contactTitle: 'Customer Care & Help Center',
+  contactTitle: 'TechMate Support & Help Center',
   contactSubtitle: 'We are available 24/7 to assist with order tracking, warranty claims, and technical guidance.',
 
   // Privacy Policy
   privacyTitle: 'Privacy Policy',
-  privacyContent: `At Karki Store Nepal, we respect your privacy and are committed to protecting your personal data. 
+  privacyContent: `At TechMate Nepal, we respect your privacy and are committed to protecting your personal data. 
 
 1. Information We Collect: We collect information you provide directly to us when placing an order, including your name, shipping address, email address, and phone number.
 2. How We Use Information: Your data is strictly used to fulfill orders, process payments via authorized partners (eSewa, Khalti, IME Pay, Card), and provide warranty support.
@@ -108,27 +108,27 @@ export const DEFAULT_SITE_CMS: SiteCMS = {
 
   // Terms & Conditions
   termsTitle: 'Terms & Conditions',
-  termsContent: `Welcome to Karki Store Nepal. By accessing or purchasing from our platform, you agree to the following terms:
+  termsContent: `Welcome to TechMate Nepal. By accessing or purchasing from our platform, you agree to the following terms:
 
-1. General Conditions: All products listed on Karki Store are guaranteed genuine. Prices are subject to change without notice.
+1. General Conditions: All products listed on TechMate are guaranteed genuine. Prices are subject to change without notice.
 2. Orders & Payments: Orders are confirmed upon successful payment verification via digital wallet, card, or cash on delivery confirmation.
 3. Shipping Policy: Orders are processed within 24 hours and delivered across Nepal within 2-4 business days.
-4. Product Warranty: Products come with standard manufacturer warranty backed by Karki Care.`,
+4. Product Warranty: Products come with standard manufacturer warranty backed by TechMate Care.`,
 
   // Returns & Refunds
   returnsTitle: 'Return & Refund Policy',
-  returnsContent: `We want you to be completely satisfied with your purchase from Karki Store.
+  returnsContent: `We want you to be completely satisfied with your purchase from TechMate.
 
 1. 7-Day Replacement Guarantee: If your item arrives defective or damaged, contact us within 7 days for a 100% free replacement.
 2. Return Eligibility: Returned products must be unused, in original packaging with all included accessories and warranty cards.
 3. Refund Processing: Approved refunds are processed to your original payment method (eSewa, Khalti, or Bank Transfer) within 3-5 business days.`,
 
   // Warranty Page
-  warrantyTitle: 'Karki Care Warranty',
-  warrantyContent: `Every electronics purchase from Karki Store is protected by Karki Care official warranty.
+  warrantyTitle: 'TechMate Care Warranty',
+  warrantyContent: `Every electronics purchase from TechMate is protected by TechMate Care official warranty.
 
 1. Coverage: Protects against technical defects, manufacturing flaws, and internal component failures.
-2. How to Claim: Submit your order number and issue description to support@karkistore.com or visit our Kathmandu service center.
+2. How to Claim: Submit your order number and issue description to support@techmate.com.np or visit our Kathmandu service center.
 3. Service Guarantee: Repairs or replacements are fulfilled within 5-7 working days under official warranty terms.`,
 
   // FAQ Page
@@ -136,7 +136,7 @@ export const DEFAULT_SITE_CMS: SiteCMS = {
   faqSubtitle: 'Find answers to common questions regarding ordering, payment, shipping, and warranty.',
   faqList: [
     {
-      question: 'How do I place an order on Karki Store?',
+      question: 'How do I place an order on TechMate?',
       answer: 'Browse our catalog of 400+ products, click "+ Add to Cart", open your cart drawer, and proceed to checkout to enter your delivery address and payment method.',
     },
     {
@@ -149,7 +149,7 @@ export const DEFAULT_SITE_CMS: SiteCMS = {
     },
     {
       question: 'Are all 400 products genuine?',
-      answer: 'Yes! Every single product on Karki Store is 100% genuine and comes with official manufacturer warranty.',
+      answer: 'Yes! Every single product on TechMate is 100% genuine and comes with official manufacturer warranty.',
     },
     {
       question: 'Can I edit website content from the Admin Backend?',
@@ -160,13 +160,13 @@ export const DEFAULT_SITE_CMS: SiteCMS = {
   // Personal Portfolio
   portfolioName: 'Karki',
   portfolioRole: 'Founder & Principal Software Engineer',
-  portfolioBio: 'Passionate tech entrepreneur and full-stack software engineer based in Kathmandu, Nepal. Architect of Karki Store — Nepal\'s leading enterprise tech marketplace serving 400+ genuine products.',
+  portfolioBio: 'Passionate tech entrepreneur and full-stack software engineer based in Kathmandu, Nepal. Architect of TechMate — Nepal\'s leading enterprise tech marketplace serving 400+ genuine products.',
   portfolioGithub: 'https://github.com',
   portfolioLinkedin: 'https://linkedin.com',
-  portfolioEmail: 'karki@karkistore.com',
+  portfolioEmail: 'karki@techmate.com.np',
   portfolioProjects: [
     {
-      title: 'Karki Store E-Commerce Marketplace',
+      title: 'TechMate E-Commerce Marketplace',
       category: 'Full-Stack Next.js / Node.js App',
       description: 'Daraz-inspired e-commerce platform supporting 400+ active items, custom CMS, eSewa/Khalti digital checkout, and real-time inventory management.',
       tech: ['Next.js', 'TypeScript', 'Node.js', 'Prisma', 'TailwindCSS'],

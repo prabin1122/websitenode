@@ -57,12 +57,12 @@ export default function Navigation() {
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-4">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-cyan-500 to-indigo-400 p-0.5 shadow-lg group-hover:scale-105 transition-transform">
-            <img src="/karki-logo.png" alt="Karki Store Logo" className="w-full h-full object-cover rounded-[10px]" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-cyan-400 p-0.5 shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform flex items-center justify-center font-black text-xl text-slate-950">
+            🤖
           </div>
           <div>
-            <span className="text-xl font-black tracking-tight text-white group-hover:text-cyan-400 transition-colors">
-              Karki Store
+            <span className="text-xl font-black tracking-tight text-white group-hover:text-cyan-400 transition-colors flex items-center gap-1">
+              TechMate <span className="text-cyan-400">.</span>
             </span>
             <span className="text-[10px] text-cyan-400 font-bold block leading-none">
               NEPAL TECH MARKETPLACE

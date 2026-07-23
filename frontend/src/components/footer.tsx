@@ -16,14 +16,16 @@ export default function Footer() {
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-cyan-500 to-indigo-400 p-0.5 shadow-lg">
-                <img src="/karki-logo.png" alt="Karki Store Logo" className="w-full h-full object-cover rounded-[10px]" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-cyan-400 p-0.5 shadow-lg shadow-cyan-500/20 flex items-center justify-center font-black text-xl text-slate-950">
+                🤖
               </div>
-              <span className="text-xl font-black text-white">Karki Store</span>
+              <span className="text-xl font-black text-white flex items-center gap-1">
+                TechMate <span className="text-cyan-400">.</span>
+              </span>
             </div>
 
             <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
-              Nepal's premier tech marketplace hosting 400+ genuine electronics, audio gear, and accessories. Fast delivery across all 77 districts with eSewa & Khalti payment integration.
+              Nepal's premier TechMate marketplace hosting 400+ genuine electronics, audio gear, and accessories. Fast delivery across all 77 districts with eSewa & Khalti payment integration.
             </p>
 
             <div className="flex items-center gap-2 pt-2">
@@ -55,7 +57,7 @@ export default function Footer() {
               <li><Link href="/experience" className="text-amber-400 hover:text-amber-300 transition font-bold">🎬 Live Journey Simulator</Link></li>
               <li><Link href="/faq" className="hover:text-cyan-400 transition">Help & FAQ</Link></li>
               <li><Link href="/returns" className="hover:text-cyan-400 transition">Return Policy</Link></li>
-              <li><Link href="/warranty" className="hover:text-cyan-400 transition">Warranty Info</Link></li>
+              <li><Link href="/warranty" className="hover:text-cyan-400 transition">TechMate Care Warranty</Link></li>
               <li><Link href="/terms" className="hover:text-cyan-400 transition">Terms of Service</Link></li>
               <li><Link href="/privacy" className="hover:text-cyan-400 transition">Privacy Policy</Link></li>
             </ul>
@@ -66,7 +68,7 @@ export default function Footer() {
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Company & Founder</h4>
             <ul className="space-y-2">
               <li><Link href="/portfolio" className="text-cyan-400 hover:underline font-bold">👨‍💻 Founder Portfolio</Link></li>
-              <li><Link href="/about" className="hover:text-cyan-400 transition">About Karki Store</Link></li>
+              <li><Link href="/about" className="hover:text-cyan-400 transition">About TechMate</Link></li>
               <li><Link href="/contact" className="hover:text-cyan-400 transition">Contact Us</Link></li>
               <li><Link href="/admin/dashboard" className="text-slate-500 hover:text-slate-300 transition">Admin Dashboard</Link></li>
             </ul>
@@ -80,7 +82,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-6 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-slate-500">
-          <p>© {new Date().getFullYear()} Karki Store. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} TechMate Nepal. All Rights Reserved.</p>
           <div className="flex gap-4">
             <span className="text-cyan-400 font-bold">eSewa • Khalti • IME Pay • COD</span>
           </div>
