@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useCart } from '../context/cart';
 import { Product } from '../data/products';
-import { showToast } from './toast';
 import { useState } from 'react';
 
 interface ProductCardProps {
@@ -11,6 +10,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const [isHovered, setIsHovered] = useState(false);
+  const [addedSuccess, setAddedSuccess] = useState(false);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -24,6 +24,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       slug: product.slug,
       imageUrl: product.imageUrl || product.image,
     });
+
+    setAddedSuccess(true);
+    setTimeout(() => setAddedSuccess(false), 1800);
   };
 
   const discountPercent = Math.min(35, 15 + (product.name.length % 20));
@@ -81,9 +84,13 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div className="flex gap-2 pt-1">
               <button
                 onClick={handleAddToCart}
-                className="flex-1 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 py-2 text-white font-black text-xs hover:from-indigo-500 hover:to-cyan-500 transition shadow-lg flex items-center justify-center gap-1 uppercase tracking-wider"
+                className={`flex-1 rounded-xl py-2 font-black text-xs transition shadow-lg flex items-center justify-center gap-1 uppercase tracking-wider ${
+                  addedSuccess
+                    ? 'bg-emerald-500 text-slate-950 scale-105'
+                    : 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white hover:from-indigo-500 hover:to-cyan-500'
+                }`}
               >
-                ⚡ Quick Add
+                {addedSuccess ? '✓ Added!' : '⚡ Quick Add'}
               </button>
               <span className="rounded-xl bg-slate-800 hover:bg-slate-700 px-3 py-2 text-cyan-400 text-xs font-bold transition flex items-center justify-center">
                 View Details →
@@ -114,9 +121,13 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <button
             onClick={handleAddToCart}
-            className="rounded-xl bg-indigo-950 border border-indigo-700/60 hover:bg-indigo-900 text-cyan-300 px-3 py-1.5 text-xs font-bold transition flex items-center gap-1 group-hover:bg-cyan-500 group-hover:text-slate-950 group-hover:border-cyan-400"
+            className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition flex items-center gap-1 ${
+              addedSuccess
+                ? 'bg-emerald-500 text-slate-950 border-emerald-400 scale-105 font-black'
+                : 'bg-indigo-950 border-indigo-700/60 hover:bg-indigo-900 text-cyan-300 group-hover:bg-cyan-500 group-hover:text-slate-950 group-hover:border-cyan-400'
+            }`}
           >
-            <span>+ Cart</span>
+            <span>{addedSuccess ? '✓ Added!' : '+ Cart'}</span>
           </button>
         </div>
       </div>

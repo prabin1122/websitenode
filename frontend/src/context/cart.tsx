@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { showToast } from '../components/toast';
+import CartAddedModal from '../components/cart-added-modal';
 
 export interface CartItem {
   id: string;
@@ -18,6 +19,8 @@ interface CartContextType {
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   total: number;
+  recentlyAddedItem: CartItem | null;
+  closeAddedModal: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -25,6 +28,8 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [recentlyAddedItem, setRecentlyAddedItem] = useState<CartItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -57,7 +62,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return [...prev, newItem];
     });
 
-    // Trigger rich cart notification
+    setRecentlyAddedItem(newItem);
+    setIsModalOpen(true);
+
+    // Trigger rich cart toast notification
     showToast(`Added "${newItem.name}" to cart!`, 'cart', {
       name: newItem.name,
       price: newItem.price,
@@ -85,11 +93,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems([]);
   };
 
+  const closeAddedModal = () => {
+    setIsModalOpen(false);
+  };
+
   const total = items.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
+  const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total }}>
+    <CartContext.Provider
+      value={{
+        items,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clearCart,
+        total,
+        recentlyAddedItem,
+        closeAddedModal,
+      }}
+    >
       {children}
+      <CartAddedModal
+        item={recentlyAddedItem}
+        isOpen={isModalOpen}
+        onClose={closeAddedModal}
+        cartTotalCount={totalItemCount}
+        cartSubtotal={total}
+      />
     </CartContext.Provider>
   );
 }
