@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import Link from 'next/link';
 import { CartItem } from '../context/cart';
 
@@ -17,11 +18,17 @@ export default function CartAddedModal({
   cartTotalCount,
   cartSubtotal,
 }: CartAddedModalProps) {
-  if (!isOpen || !item) return null;
+  const [mounted, setMounted] = useState(false);
 
-  return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in font-sans">
-      <div className="relative w-full max-w-md bg-slate-900 border border-cyan-500/50 rounded-3xl p-6 shadow-2xl shadow-cyan-500/20 text-white space-y-5 transform animate-scale-up">
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || !isOpen || !item) return null;
+
+  const modalContent = (
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md font-sans">
+      <div className="relative w-full max-w-md bg-slate-900 border-2 border-cyan-400 rounded-3xl p-6 shadow-2xl shadow-cyan-500/30 text-white space-y-5 animate-scale-up">
         
         {/* Close Button */}
         <button
@@ -33,11 +40,11 @@ export default function CartAddedModal({
 
         {/* Modal Header */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-xl shrink-0">
+          <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 flex items-center justify-center text-xl shrink-0">
             ✓
           </div>
           <div>
-            <h3 className="text-lg font-black text-white">Added to Your Cart!</h3>
+            <h3 className="text-lg font-black text-white">Product Added to Your Cart!</h3>
             <p className="text-xs text-cyan-400 font-medium">Your TechMate cart has been updated.</p>
           </div>
         </div>
@@ -64,7 +71,7 @@ export default function CartAddedModal({
         </div>
 
         {/* Cart Summary Bar */}
-        <div className="bg-indigo-950/60 border border-indigo-800/80 rounded-2xl p-3.5 flex justify-between items-center text-xs">
+        <div className="bg-indigo-950/80 border border-indigo-800 rounded-2xl p-3.5 flex justify-between items-center text-xs">
           <div>
             <span className="text-slate-400 block text-[10px] uppercase font-bold">Total Cart Items</span>
             <span className="text-white font-black text-sm">{cartTotalCount} Items</span>
@@ -96,4 +103,6 @@ export default function CartAddedModal({
       </div>
     </div>
   );
+
+  return ReactDOM.createPortal(modalContent, document.body);
 }

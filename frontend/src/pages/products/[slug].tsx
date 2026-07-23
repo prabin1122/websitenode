@@ -7,8 +7,8 @@ import Navigation from '../../components/navigation';
 import Footer from '../../components/footer';
 import ParticleCanvas from '../../components/particle-canvas';
 import LivePurchaseTicker from '../../components/live-purchase-ticker';
+import ProductCard from '../../components/product-card';
 import { useCart } from '../../context/cart';
-import { showToast } from '../../components/toast';
 import { INITIAL_400_PRODUCTS, Product } from '../../data/products';
 
 interface ProductDetails {
@@ -48,13 +48,13 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
   const [quantity, setQuantity] = useState(1);
   const [selectedDistrict, setSelectedDistrict] = useState(NEPAL_DISTRICTS[0]);
   const [activeTab, setActiveTab] = useState<'overview' | 'specs' | 'reviews' | 'faq'>('overview');
-  const [allProducts, setAllProducts] = useState<ProductDetails[]>(INITIAL_400_PRODUCTS);
+  const [allProducts, setAllProducts] = useState<Product[]>(INITIAL_400_PRODUCTS);
   const [selectedImage, setSelectedImage] = useState<string>('');
 
   useEffect(() => {
     const slug = router.query.slug as string;
     const saved = localStorage.getItem('custom_products');
-    let loadedProducts: ProductDetails[] = INITIAL_400_PRODUCTS;
+    let loadedProducts: Product[] = INITIAL_400_PRODUCTS;
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -89,7 +89,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
       <div className="min-h-screen bg-slate-950 flex items-center justify-center font-sans">
         <div className="text-center space-y-3">
           <div className="w-12 h-12 rounded-full border-4 border-cyan-400 border-t-transparent animate-spin mx-auto" />
-          <p className="text-cyan-400 font-bold text-sm">Loading Karki Store Product Specifications...</p>
+          <p className="text-cyan-400 font-bold text-sm">Loading TechMate Product Specifications...</p>
         </div>
       </div>
     );
@@ -101,7 +101,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
         <Navigation />
         <main className="flex-1 flex flex-col items-center justify-center py-20 text-center px-4 space-y-4">
           <div className="text-6xl">📦</div>
-          <h1 className="text-3xl font-black text-white">Item Not Found in Catalog</h1>
+          <h1 className="text-3xl font-black text-white">Item Not Found in TechMate Catalog</h1>
           <p className="text-slate-400 text-xs max-w-sm">The product you are looking for is currently being updated or has moved.</p>
           <Link href="/shop" className="rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 px-6 py-3 font-black text-white text-xs hover:scale-105 transition shadow-2xl">
             Browse All 400 Products Marketplace →
@@ -123,8 +123,8 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
       price: product.price,
       quantity,
       slug: product.slug,
+      imageUrl: product.imageUrl || product.image,
     });
-    showToast(`⚡ Added ${quantity} × "${product.name}" to your Karki Store cart!`, 'success');
   };
 
   const handleInstantBuy = () => {
@@ -133,7 +133,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
   };
 
   const specsList = product.specs || [
-    '100% Genuine Karki Care Certified Authentic Item',
+    '100% Genuine TechMate Care Certified Authentic Item',
     'Official 1-Year Manufacturer Replacement Guarantee',
     'High-Durability Aerospace Matte Finish Housing',
     'Universal Plug & Play Compatibility across devices',
@@ -143,7 +143,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative overflow-x-hidden">
       <Head>
-        <title>{product.name} | Karki Store Tech Marketplace</title>
+        <title>{product.name} | TechMate Tech Marketplace</title>
         <meta name="description" content={product.description} />
       </Head>
 
@@ -189,13 +189,13 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
               )}
             </div>
 
-            {/* Karki Genuine Guarantee Seal */}
+            {/* TechMate Genuine Guarantee Seal */}
             <div className="rounded-2xl bg-slate-950 p-4 border border-indigo-950 flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl border border-cyan-500/30">
                 🛡️
               </div>
               <div>
-                <p className="text-xs font-black text-white">Karki Care Verified Authentic</p>
+                <p className="text-xs font-black text-white">TechMate Care Verified Authentic</p>
                 <p className="text-[11px] text-slate-400">100% Original Serial Code • 1-Yr Replacement Guarantee</p>
               </div>
             </div>
@@ -332,7 +332,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
             <div className="space-y-4">
               <h3 className="text-xl font-black text-white">Full Product Overview</h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                {product.longDescription || `${product.name} represents the pinnacle of modern technology engineering. Designed for power users and enthusiasts across Nepal, it combines premium materials, instant connectivity, and rigorous quality testing. Every unit dispatched from our Kathmandu central hub undergoes multi-point inspection and includes the official Karki Care 1-year replacement warranty.`}
+                {product.longDescription || `${product.name} represents the pinnacle of modern technology engineering. Designed for power users and enthusiasts across Nepal, it combines premium materials, instant connectivity, and rigorous quality testing. Every unit dispatched from our Kathmandu central hub undergoes multi-point inspection and includes the official TechMate Care 1-year replacement warranty.`}
               </p>
             </div>
           )}
@@ -369,7 +369,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
                 </div>
                 <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-2">
                   <span className="text-cyan-400 font-bold text-xs">🇳🇵 Pooja S. (Lalitpur)</span>
-                  <p className="text-xs text-slate-300">"High quality item. Karki Care warranty gives total peace of mind!"</p>
+                  <p className="text-xs text-slate-300">"High quality item. TechMate Care warranty gives total peace of mind!"</p>
                   <p className="text-[10px] text-amber-400">Rating: ⭐⭐⭐⭐⭐ 5/5</p>
                 </div>
               </div>
@@ -380,7 +380,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
           {activeTab === 'faq' && (
             <div className="space-y-4 text-xs">
               <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-1">
-                <h4 className="font-bold text-white">Q: How does the 1-Year Karki Care warranty work?</h4>
+                <h4 className="font-bold text-white">Q: How does the 1-Year TechMate Care warranty work?</h4>
                 <p className="text-slate-400">A: Every item includes a registered serial number seal. If any defect occurs within 1 year, we replace it free of charge.</p>
               </div>
               <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-1">
@@ -391,7 +391,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
           )}
         </section>
 
-        {/* RELATED PRODUCTS SHOWCASE */}
+        {/* RELATED PRODUCTS SHOWCASE WITH ADD TO CART BUTTONS */}
         <section className="space-y-4">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-black text-white">Related Products You Might Like</h2>
@@ -405,17 +405,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product: initialProduct }) =>
               .filter((p) => p.slug !== product.slug)
               .slice(0, 4)
               .map((related) => (
-                <Link key={related.id} href={`/products/${related.slug}`} className="group block rounded-2xl bg-slate-900/90 p-4 border border-indigo-950 hover:border-cyan-400 transition-all duration-300 hover:-translate-y-1 space-y-2 backdrop-blur-md">
-                  <div className="aspect-square bg-slate-950 rounded-xl flex items-center justify-center text-4xl overflow-hidden border border-slate-800">
-                    {related.imageUrl || related.image ? (
-                      <img src={related.imageUrl || related.image} alt={related.name} className="w-full h-full object-cover group-hover:scale-105 transition" />
-                    ) : (
-                      '📦'
-                    )}
-                  </div>
-                  <h3 className="font-bold text-white text-xs truncate group-hover:text-cyan-400 transition">{related.name}</h3>
-                  <p className="text-base font-black text-cyan-400">${related.price}</p>
-                </Link>
+                <ProductCard key={related.id} product={related} />
               ))}
           </div>
         </section>
