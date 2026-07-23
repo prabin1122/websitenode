@@ -104,8 +104,8 @@ const Shop: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>Shop 400+ Products | Karki Store Tech Marketplace</title>
-        <meta name="description" content="Explore Karki Store's catalog of 400 genuine tech items with express Nepal shipping." />
+        <title>Shop 400+ Products | TechMate Solution Store</title>
+        <meta name="description" content="Explore TechMate Solution Store's catalog of 400 genuine tech items with express Nepal shipping." />
       </Head>
 
       <Navigation />
@@ -116,7 +116,7 @@ const Shop: NextPage = () => {
           <div className="mx-auto max-w-7xl px-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white mb-1">
-                Karki Store <span className="text-cyan-400">400+ Products</span>
+                TechMate Solution Store <span className="text-cyan-400">400+ Products</span>
               </h1>
               <p className="text-slate-400 text-sm">Nepal's largest genuine tech catalog with live inventory tracking</p>
             </div>
@@ -213,7 +213,7 @@ const Shop: NextPage = () => {
               {/* Controls bar */}
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6 bg-slate-900 p-4 rounded-2xl border border-indigo-950 shadow-md">
                 <p className="text-xs font-bold text-slate-300">
-                  Showing <span className="text-cyan-400 font-black">{filteredProducts.length}</span> Karki Store products
+                  Showing <span className="text-cyan-400 font-black">{filteredProducts.length}</span> TechMate Solution Store products
                   {filteredProducts.length > 0 && ` (Page ${currentPage} of ${totalPages})`}
                 </p>
 

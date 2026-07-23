@@ -48,7 +48,7 @@ const CheckoutPage: NextPage = () => {
         <Navigation />
         <main className="flex-1 flex flex-col items-center justify-center py-20 text-center px-4">
           <div className="text-6xl mb-4">🛒</div>
-          <h2 className="text-2xl font-bold text-white mb-2">No Items in Karki Store Cart</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">No Items in TechMate Solution Store Cart</h2>
           <p className="text-xs text-slate-400 mb-6">Select products from our 400+ tech catalog to proceed.</p>
           <Link href="/shop" className="rounded-xl bg-indigo-600 px-6 py-3 text-white font-bold text-xs hover:bg-indigo-500 transition shadow-md">
             Browse 400 Products →
@@ -90,7 +90,7 @@ const CheckoutPage: NextPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const orderId = 'KARKI-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+    const orderId = 'TECHMATE-' + Math.random().toString(36).substring(2, 9).toUpperCase();
     const order = {
       id: orderId,
       items: [...items],
@@ -118,7 +118,7 @@ const CheckoutPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>Checkout | Karki Store Tech Marketplace</title>
+        <title>Checkout | TechMate Solution Store</title>
       </Head>
 
       <Navigation />
@@ -131,7 +131,7 @@ const CheckoutPage: NextPage = () => {
             </div>
             <div>
               <h1 className="text-3xl font-black text-white">Order Confirmed!</h1>
-              <p className="text-slate-400 text-xs mt-1">Thank you for shopping with Karki Store Nepal.</p>
+              <p className="text-slate-400 text-xs mt-1">Thank you for shopping with TechMate Solution Store Nepal.</p>
             </div>
 
             <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-3 text-xs text-left">
@@ -164,7 +164,7 @@ const CheckoutPage: NextPage = () => {
           </div>
         ) : (
           <div>
-            <h1 className="text-3xl font-black text-white mb-8">Karki Store Checkout</h1>
+            <h1 className="text-3xl font-black text-white mb-8">TechMate Solution Store Checkout</h1>
 
             <form onSubmit={handleSubmit} className="grid gap-8 lg:grid-cols-3">
               {/* Shipping & Payment Info */}
@@ -371,7 +371,7 @@ const CheckoutPage: NextPage = () => {
                     type="submit"
                     className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 py-4 text-white font-black text-xs hover:from-indigo-500 hover:to-cyan-500 transition shadow-xl uppercase tracking-wider"
                   >
-                    PLACE ORDER WITH KARKI STORE →
+                    PLACE ORDER WITH TECHMATE SOLUTION STORE →
                   </button>
                 </div>
               </div>

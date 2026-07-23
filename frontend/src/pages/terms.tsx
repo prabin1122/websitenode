@@ -15,8 +15,8 @@ const TermsPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>{cms.termsTitle} | Karki Store</title>
-        <meta name="description" content="Karki Store Nepal Terms of Service and Conditions." />
+        <title>{cms.termsTitle} | TechMate Solution Store</title>
+        <meta name="description" content="TechMate Solution Store Nepal Terms of Service and Conditions." />
       </Head>
 
       <Navigation />
@@ -29,7 +29,7 @@ const TermsPage: NextPage = () => {
               STORE POLICIES
             </span>
             <h1 className="text-4xl font-black text-white">{cms.termsTitle}</h1>
-            <p className="text-xs text-slate-400 mt-1">Official User Agreement • Karki Store Nepal</p>
+            <p className="text-xs text-slate-400 mt-1">Official User Agreement • TechMate Solution Store Nepal</p>
           </div>
         </section>
 

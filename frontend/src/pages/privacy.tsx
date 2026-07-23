@@ -15,8 +15,8 @@ const PrivacyPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>{cms.privacyTitle} | Karki Store</title>
-        <meta name="description" content="Karki Store Nepal Privacy Policy and Customer Data Protection." />
+        <title>{cms.privacyTitle} | TechMate Solution Store</title>
+        <meta name="description" content="TechMate Solution Store Nepal Privacy Policy and Customer Data Protection." />
       </Head>
 
       <Navigation />
@@ -29,7 +29,7 @@ const PrivacyPage: NextPage = () => {
               LEGAL & PRIVACY
             </span>
             <h1 className="text-4xl font-black text-white">{cms.privacyTitle}</h1>
-            <p className="text-xs text-slate-400 mt-1">Last updated: 2026 • Karki Store Protection Guarantee</p>
+            <p className="text-xs text-slate-400 mt-1">Last updated: 2026 • TechMate Solution Store Protection Guarantee</p>
           </div>
         </section>
 

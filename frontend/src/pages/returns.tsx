@@ -15,8 +15,8 @@ const ReturnsPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>{cms.returnsTitle} | Karki Store</title>
-        <meta name="description" content="Karki Store 7-day money back guarantee and return policy." />
+        <title>{cms.returnsTitle} | TechMate Solution Store</title>
+        <meta name="description" content="TechMate Solution Store 7-day money back guarantee and return policy." />
       </Head>
 
       <Navigation />

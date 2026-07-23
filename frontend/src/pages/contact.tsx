@@ -30,8 +30,8 @@ const Contact: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>Contact Us | Karki Store Tech Marketplace</title>
-        <meta name="description" content="Get in touch with Karki Store Nepal customer care team." />
+        <title>Contact Us | TechMate Solution Store</title>
+        <meta name="description" content="Get in touch with TechMate Solution Store Nepal customer care team." />
       </Head>
 
       <Navigation />
@@ -41,10 +41,10 @@ const Contact: NextPage = () => {
         <section className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 border-b border-indigo-950 py-20">
           <div className="mx-auto max-w-7xl px-4">
             <span className="bg-cyan-500/20 text-cyan-300 text-xs font-black px-3 py-1 rounded-full uppercase border border-cyan-400/30 mb-3 inline-block">
-              KARKI STORE HELPLINE
+              TECHMATE SOLUTION HELPLINE
             </span>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-3">Customer Care & Support</h1>
-            <p className="text-slate-300 text-sm max-w-xl">We are here 24/7 to assist you with order status, technical guidance, and Karki warranty support.</p>
+            <p className="text-slate-300 text-sm max-w-xl">We are here 24/7 to assist you with order status, technical guidance, and TechMate warranty support.</p>
           </div>
         </section>
 
@@ -56,7 +56,7 @@ const Contact: NextPage = () => {
               <h2 className="text-2xl font-black text-white mb-6">Send us a Message</h2>
               {submitted && (
                 <div className="mb-6 p-4 bg-emerald-950 border border-emerald-500 text-emerald-300 rounded-xl text-xs font-bold">
-                  ✓ Thank you! Your message has been sent to Karki Store customer care team.
+                  ✓ Thank you! Your message has been sent to TechMate Solution Store customer care team.
                 </div>
               )}
               <form onSubmit={handleSubmit} className="space-y-4 text-xs">
@@ -68,7 +68,7 @@ const Contact: NextPage = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    placeholder="e.g. Ramesh Karki"
+                    placeholder="e.g. Ramesh Sharma"
                     className="w-full rounded-xl bg-slate-950 border border-slate-700 px-4 py-3 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -104,7 +104,7 @@ const Contact: NextPage = () => {
                     onChange={handleChange}
                     required
                     rows={4}
-                    placeholder="How can Karki Store help you?"
+                    placeholder="How can TechMate Solution Store help you?"
                     className="w-full rounded-xl bg-slate-950 border border-slate-700 px-4 py-3 text-white focus:outline-none focus:border-cyan-400"
                   ></textarea>
                 </div>
@@ -112,7 +112,7 @@ const Contact: NextPage = () => {
                   type="submit"
                   className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 px-6 py-3.5 text-white font-bold hover:from-indigo-500 hover:to-cyan-500 transition shadow-lg text-xs uppercase tracking-wider"
                 >
-                  Send Message to Karki Store →
+                  Send Message to TechMate Solution Store →
                 </button>
               </form>
             </div>
@@ -123,8 +123,8 @@ const Contact: NextPage = () => {
                 <div className="text-3xl p-2 bg-indigo-950 rounded-xl border border-indigo-800">📧</div>
                 <div>
                   <h3 className="font-bold text-white text-sm mb-1">Email Support</h3>
-                  <p className="text-xs text-cyan-400 font-semibold">support@karkistore.com</p>
-                  <p className="text-xs text-slate-400 mt-0.5">sales@karkistore.com</p>
+                  <p className="text-xs text-cyan-400 font-semibold">support@techmate.com.np</p>
+                  <p className="text-xs text-slate-400 mt-0.5">sales@techmate.com.np</p>
                 </div>
               </div>
 
@@ -141,7 +141,7 @@ const Contact: NextPage = () => {
                 <div className="text-3xl p-2 bg-indigo-950 rounded-xl border border-indigo-800">📍</div>
                 <div>
                   <h3 className="font-bold text-white text-sm mb-1">Headquarters Address</h3>
-                  <p className="text-xs text-slate-300 font-medium">Karki Store Tower, New Road</p>
+                  <p className="text-xs text-slate-300 font-medium">TechMate Tower, New Road</p>
                   <p className="text-xs text-slate-400">Kathmandu, Nepal</p>
                 </div>
               </div>

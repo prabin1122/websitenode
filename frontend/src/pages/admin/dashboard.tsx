@@ -95,7 +95,7 @@ const AdminDashboard: NextPage = () => {
     if (confirm('Re-seed catalog with all 400 original products with images? This will overwrite your current product list.')) {
       setProducts(INITIAL_400_PRODUCTS);
       localStorage.setItem('custom_products', JSON.stringify(INITIAL_400_PRODUCTS));
-      alert('✓ Successfully loaded all 400 products into Karki Store!');
+      alert('✓ Successfully loaded all 400 products into TechMate Solution Store!');
     }
   };
 
@@ -220,29 +220,32 @@ const AdminDashboard: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
       <Head>
-        <title>Admin Dashboard | Karki Store Tech Marketplace</title>
+        <title>Admin Dashboard | TechMate Solution Store</title>
       </Head>
 
-      {/* Admin Header */}
-      <nav className="border-b border-indigo-950 bg-slate-900 text-white sticky top-0 z-50">
-        <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 font-black">
-            <img src="/karki-logo.png" alt="Karki Logo" className="w-8 h-8 rounded-lg" />
-            <span className="text-lg">KARKI<span className="text-cyan-400">STORE</span> <span className="text-xs text-indigo-300 font-normal ml-2">Master Admin</span></span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-xs font-semibold text-slate-300 hover:text-cyan-400">
-              🌐 View Karki Store
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="rounded-xl bg-red-600 px-4 py-1.5 text-white font-semibold text-xs hover:bg-red-700 transition"
-            >
-              Logout
-            </button>
+      <header className="bg-slate-900 border-b border-indigo-950 px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-slate-950 border border-cyan-500/50 flex items-center justify-center text-xl">
+            ⚡
+          </div>
+          <div>
+            <h1 className="font-black text-white text-base">TECHMATE <span className="text-cyan-400">ADMIN CONTROL CENTER</span></h1>
+            <p className="text-[10px] text-slate-400 font-semibold">Nepal Enterprise Management System</p>
           </div>
         </div>
-      </nav>
+
+        <div className="flex items-center gap-3">
+          <Link href="/" className="px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 transition border border-slate-700">
+            🌐 View TechMate Solution Store
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="px-3.5 py-1.5 rounded-xl bg-red-950/80 text-red-300 text-xs font-bold hover:bg-red-900 transition border border-red-800"
+          >
+            Logout
+          </button>
+        </div>
+      </header>
 
       <main className="mx-auto max-w-7xl px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">

@@ -15,8 +15,8 @@ const WarrantyPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>{cms.warrantyTitle} | Karki Store</title>
-        <meta name="description" content="Official Karki Care tech warranty and guarantee." />
+        <title>{cms.warrantyTitle} | TechMate Solution Store</title>
+        <meta name="description" content="Official TechMate Care tech warranty and guarantee." />
       </Head>
 
       <Navigation />

@@ -24,7 +24,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           {/* Drawer Header */}
           <div className="p-6 border-b border-slate-800 flex items-center justify-between">
             <h2 className="text-lg font-black text-white flex items-center gap-2">
-              <span>🛒</span> Karki Store Cart
+              <span>🛒</span> TechMate Solution Store Cart
               <span className="text-xs bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded-full font-bold">
                 {items.reduce((sum, item) => sum + item.quantity, 0)} Items
               </span>
@@ -43,7 +43,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <div className="text-center py-16 space-y-3">
                 <div className="text-5xl">🛍️</div>
                 <p className="text-sm font-bold text-slate-300">Your cart is empty</p>
-                <p className="text-xs text-slate-500">Explore 400+ tech products in Karki Store</p>
+                <p className="text-xs text-slate-500">Explore 400+ tech products in TechMate Solution Store</p>
               </div>
             ) : (
               items.map((item) => (

@@ -19,18 +19,18 @@ const CartPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>Your Shopping Cart | Karki Store</title>
+        <title>Your Shopping Cart | TechMate Solution Store</title>
       </Head>
 
       <Navigation />
 
       <main className="flex-1 mx-auto max-w-7xl px-4 py-12">
-        <h1 className="text-3xl font-black text-white mb-8">Karki Store Cart</h1>
+        <h1 className="text-3xl font-black text-white mb-8">TechMate Solution Store Cart</h1>
 
         {items.length === 0 ? (
           <div className="text-center py-20 bg-slate-900 rounded-3xl border border-slate-800">
             <div className="text-6xl mb-4">🛒</div>
-            <h2 className="text-xl font-bold text-white mb-2">Your Karki Store Cart is Empty</h2>
+            <h2 className="text-xl font-bold text-white mb-2">Your TechMate Solution Store Cart is Empty</h2>
             <p className="text-xs text-slate-400 mb-6">Explore our 400+ genuine tech products to add items.</p>
             <Link href="/shop" className="inline-block rounded-xl bg-indigo-600 px-6 py-3 text-white font-bold text-xs hover:bg-indigo-500 transition shadow-md">
               Browse 400 Products →

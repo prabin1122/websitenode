@@ -72,27 +72,27 @@ export interface SiteCMS {
 
 export const DEFAULT_SITE_CMS: SiteCMS = {
   // Global & Header
-  announcementText: '⚡ Welcome to TechMate Nepal — Official Tech Marketplace • Free Express Delivery on orders over $50',
+  announcementText: '⚡ Welcome to TechMate Solution Store — Official Tech Marketplace • Free Express Delivery on orders over $50',
   supportPhone: '+977 1-4000000 / +977 9800000000',
   supportEmail: 'support@techmate.com.np',
   officeAddress: 'TechMate Tower, New Road, Kathmandu, Nepal',
   workingHours: 'Sunday - Friday: 9:00 AM - 8:00 PM',
 
   // Home Page
-  heroTitle: "Nepal's #1 TechMate Marketplace",
+  heroTitle: "Nepal's #1 TechMate Solution Store",
   heroSubtitle: 'Shop over 400+ genuine headphones, 4K webcams, RGB mechanical keyboards, and smart gadgets.',
   heroCtaText: 'EXPLORE TECHMATE CATALOG (400) →',
   promoTitle: 'Supercharge Your Tech Workspace Today',
   promoSubtitle: 'Limited-time deals on mechanical keyboards, 4K webcams, and ergonomic accessories.',
 
   // Shop Page
-  shopTitle: 'TechMate 400+ Electronics Catalog',
+  shopTitle: 'TechMate Solution Store 400+ Electronics Catalog',
   shopSubtitle: "Browse Nepal's largest genuine tech inventory with live stock tracking and instant delivery.",
 
   // About Page
-  aboutTitle: 'About TechMate Nepal',
+  aboutTitle: 'About TechMate Solution Store',
   aboutSubtitle: 'Empowering creators, developers, and tech enthusiasts across Nepal with genuine electronics.',
-  aboutMission: 'At TechMate, our mission is to deliver authentic, enterprise-grade technology to every district in Nepal. We curate over 400 products with strict quality assurance and dedicated post-purchase warranty support.',
+  aboutMission: 'At TechMate Solution Store, our mission is to deliver authentic, enterprise-grade technology to every district in Nepal. We curate over 400 products with strict quality assurance and dedicated post-purchase warranty support.',
 
   // Contact Page
   contactTitle: 'TechMate Support & Help Center',

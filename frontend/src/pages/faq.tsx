@@ -20,8 +20,8 @@ const FAQPage: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Head>
-        <title>{cms.faqTitle} | Karki Store Help Center</title>
-        <meta name="description" content="Frequently Asked Questions about Karki Store orders, shipping, and warranty." />
+        <title>{cms.faqTitle} | TechMate Solution Store Help Center</title>
+        <meta name="description" content="Frequently Asked Questions about TechMate Solution Store orders, shipping, and warranty." />
       </Head>
 
       <Navigation />
