@@ -158,12 +158,12 @@ export const DEFAULT_SITE_CMS: SiteCMS = {
   ],
 
   // Personal Portfolio
-  portfolioName: 'Karki',
+  portfolioName: 'TechMate Team',
   portfolioRole: 'Founder & Principal Software Engineer',
-  portfolioBio: 'Passionate tech entrepreneur and full-stack software engineer based in Kathmandu, Nepal. Architect of TechMate — Nepal\'s leading enterprise tech marketplace serving 400+ genuine products.',
+  portfolioBio: 'Passionate tech entrepreneur and full-stack software engineer based in Kathmandu, Nepal. Architect of TechMate Solution Store — Nepal\'s leading enterprise tech marketplace serving 400+ genuine products.',
   portfolioGithub: 'https://github.com',
   portfolioLinkedin: 'https://linkedin.com',
-  portfolioEmail: 'karki@techmate.com.np',
+  portfolioEmail: 'info@techmate.com.np',
   portfolioProjects: [
     {
       title: 'TechMate E-Commerce Marketplace',

@@ -5,7 +5,7 @@ const STATIONS = [
     id: 1,
     title: '1. Cyber Storefront Entry',
     action: 'Aarav walks up as AI Storefront Scanner verifies identity & opens automatic doors.',
-    gesture: '🤖 Karki AI Drone greets Aarav & projects holographic catalog',
+    gesture: '🤖 TechMate AI Drone greets Aarav & projects holographic catalog',
     dialogue: '🤖 AI Drone: "Welcome Aarav! 400 Tech items in stock."',
     speech: '👋 Entering AI Smart Store...',
     icon: '🏬',
@@ -30,7 +30,7 @@ const STATIONS = [
   {
     id: 4,
     title: '4. AI Robotic Packaging & Seal',
-    action: 'Cyber robotic arm scans barcode with red laser & applies hologram Karki Care seal.',
+    action: 'Cyber robotic arm scans barcode with red laser & applies hologram TechMate Care seal.',
     dialogue: '🏭 Robotic Arm: "Serial #KS-992 Hologram Warranty Sealed!"',
     speech: '🤖 Robotic Laser Seal...',
     icon: '🏭',
@@ -203,7 +203,7 @@ export default function HumanWalkingJourney() {
                 🤖
               </div>
               <div className="bg-cyan-950/90 text-cyan-300 text-[9px] font-mono font-black px-2.5 py-0.5 rounded-md border border-cyan-500/40 shadow-lg mt-0.5">
-                Karki AI Drone
+                TechMate AI Drone
               </div>
             </div>
 

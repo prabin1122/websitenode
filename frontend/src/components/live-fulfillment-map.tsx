@@ -139,7 +139,7 @@ export default function LiveFulfillmentMap() {
             3. Package Received & Unboxed
           </h3>
           <p className="text-xs text-slate-300 mb-3">
-            Customer receives authentic sealed package with Karki Care warranty.
+            Customer receives authentic sealed package with TechMate Care warranty.
           </p>
 
           <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-1">
@@ -153,7 +153,7 @@ export default function LiveFulfillmentMap() {
           <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
             <p className="text-emerald-300 font-bold">💡 Hover Details:</p>
             <p>• 7-day money-back replacement guarantee</p>
-            <p>• 1-year official Karki Care warranty seal</p>
+            <p>• 1-year official TechMate Care warranty seal</p>
           </div>
         </div>
       </div>

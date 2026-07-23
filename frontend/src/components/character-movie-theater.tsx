@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 const MOVIE_SCENES = [
   {
     id: 1,
-    title: '1. Customer Aarav Enters Karki Store',
-    subtitle: 'Aarav opens Karki Store on his mobile phone and enters the tech marketplace.',
+    title: '1. Customer Aarav Enters TechMate Solution Store',
+    subtitle: 'Aarav opens TechMate Solution Store on his mobile phone and enters the tech marketplace.',
     characterAction: '🚶‍♂️ Aarav walking into digital store...',
     detail: 'Browsing 400+ genuine tech products in Kathmandu.',
     bg: 'from-slate-950 via-indigo-950 to-slate-900',
@@ -13,7 +13,7 @@ const MOVIE_SCENES = [
   {
     id: 2,
     title: '2. Selecting Product & Adding To Cart',
-    subtitle: 'Aarav inspects Sony Headphones, checks Karki warranty seal, and taps Add to Cart.',
+    subtitle: 'Aarav inspects Sony Headphones, checks TechMate warranty seal, and taps Add to Cart.',
     characterAction: '🎧 Inspecting Sony Headphones & tapping + Add to Cart...',
     detail: 'Product added! Quantity: 1 • Discount: -25% applied.',
     bg: 'from-indigo-950 via-slate-900 to-purple-950',
@@ -31,8 +31,8 @@ const MOVIE_SCENES = [
   {
     id: 4,
     title: '4. Warehouse Technician Packaging Item',
-    subtitle: 'Technician scans barcode, applies Karki Care warranty sticker, and seals package.',
-    characterAction: '🏭 Barcode scanned #KS-992 • Box sealed with bubble wrap!',
+    subtitle: 'Technician scans barcode, applies TechMate Care warranty sticker, and seals package.',
+    characterAction: '🏭 Barcode scanned #TM-992 • Box sealed with bubble wrap!',
     detail: 'Quality Assurance Verified • Ready for courier pickup.',
     bg: 'from-slate-950 via-indigo-950 to-amber-950',
     color: '#f59e0b',
@@ -51,7 +51,7 @@ const MOVIE_SCENES = [
     title: '6. Doorstep Handover & Happy Unboxing',
     subtitle: 'Bikash hands package to Aarav. Aarav unboxes genuine headphones with 5-star rating!',
     characterAction: '🎁 Doorstep handover complete! Aarav unboxes headphones ⭐⭐⭐⭐⭐',
-    detail: 'Customer rating: 5.0/5.0 • 1-Year Karki Warranty active.',
+    detail: 'Customer rating: 5.0/5.0 • 1-Year TechMate Warranty active.',
     bg: 'from-emerald-950 via-slate-900 to-cyan-950',
     color: '#10b981',
   },

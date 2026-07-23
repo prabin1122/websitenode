@@ -37,7 +37,7 @@ export function PackageDeliveryLottieScene() {
       <circle cx="80" cy="155" r="6" fill="#06b6d4" />
       <circle cx="190" cy="155" r="6" fill="#06b6d4" />
 
-      {/* Karki Delivery Box */}
+      {/* TechMate Delivery Box */}
       <rect x="70" y="100" width="40" height="30" rx="4" fill="#f59e0b" stroke="#ffffff" strokeWidth="1.5" />
       <path d="M70 115 H110 M90 100 V130" stroke="#000000" opacity="0.4" strokeWidth="1.5" />
 

@@ -88,7 +88,7 @@ export default function LandscapeAnimation() {
         {/* Flying Drone / Bird Animation */}
         <div className="absolute top-14 left-10 w-full pointer-events-none">
           <div className="flex items-center gap-2 text-xs font-mono font-bold text-cyan-300 bg-slate-950/80 px-2.5 py-1 rounded-full border border-cyan-500/40 shadow-lg w-max animate-pulse">
-            <span>🚁 Karki Delivery Drone #KT-99</span>
+            <span>🚁 TechMate Delivery Drone #TM-99</span>
           </div>
         </div>
 
@@ -131,7 +131,7 @@ export default function LandscapeAnimation() {
 
           {/* Cyclist */}
           <div className="flex items-center gap-2 bg-indigo-950/90 text-indigo-300 text-xs font-mono font-bold px-3 py-1 rounded-full border border-indigo-800 shadow-xl">
-            <span>🚴‍♂️ Bikash Cycling to Karki Store</span>
+            <span>🚴‍♂️ Bikash Cycling to TechMate Solution Store</span>
           </div>
 
           {/* Delivery Van */}

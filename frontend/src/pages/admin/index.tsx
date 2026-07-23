@@ -13,7 +13,7 @@ const AdminLogin: NextPage = () => {
     e.preventDefault();
     
     if (
-      (email === 'admin@techmate.com.np' || email === 'admin@karkistore.com' || email === 'admin@shop.com') &&
+      (email === 'admin@techmate.com.np' || email === 'admin@shop.com') &&
       (password === 'admin' || password === 'admin123')
     ) {
       localStorage.setItem('adminLoggedIn', 'true');

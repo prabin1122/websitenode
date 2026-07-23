@@ -41,8 +41,8 @@ export function NepalExpressShippingIllustration() {
   );
 }
 
-// Karki Warranty Shield
-export function KarkiWarrantyShieldIllustration() {
+// TechMate Warranty Shield
+export function TechMateWarrantyShieldIllustration() {
   return (
     <svg width="120" height="120" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 L50 10 Z" fill="#0f172a" stroke="#f59e0b" strokeWidth="2.5" />
@@ -74,8 +74,8 @@ export function CodeTerminalIllustration() {
       <circle cx="32" cy="16" r="4" fill="#f59e0b" />
       <circle cx="44" cy="16" r="4" fill="#10b981" />
       
-      <text x="20" y="50" fill="#06b6d4" fontFamily="monospace" fontSize="11" fontWeight="bold">const karki = new KarkiStore();</text>
-      <text x="20" y="70" fill="#6366f1" fontFamily="monospace" fontSize="11">karki.deploy({'{ catalog: 400 }'});</text>
+      <text x="20" y="50" fill="#06b6d4" fontFamily="monospace" fontSize="11" fontWeight="bold">const techmate = new TechMateStore();</text>
+      <text x="20" y="70" fill="#6366f1" fontFamily="monospace" fontSize="11">techmate.deploy({'{ catalog: 400 }'});</text>
       <text x="20" y="90" fill="#10b981" fontFamily="monospace" fontSize="11">✓ Status: 100% Online</text>
       <text x="20" y="110" fill="#f59e0b" fontFamily="monospace" fontSize="11">🚀 Delivery: 77 Districts</text>
     </svg>

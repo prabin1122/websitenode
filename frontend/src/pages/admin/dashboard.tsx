@@ -132,7 +132,7 @@ const AdminDashboard: NextPage = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `karki_store_orders_${Date.now()}.csv`);
+    link.setAttribute('download', `techmate_store_orders_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -141,7 +141,7 @@ const AdminDashboard: NextPage = () => {
   const handleSaveCMS = (e: React.FormEvent) => {
     e.preventDefault();
     saveSiteCMS(cms);
-    alert('✓ All Karki Store CMS page content updated successfully!');
+    alert('✓ All TechMate Solution Store CMS page content updated successfully!');
   };
 
   const handleAddProduct = (e: React.FormEvent) => {
@@ -165,7 +165,7 @@ const AdminDashboard: NextPage = () => {
       setProducts(updated);
       localStorage.setItem('custom_products', JSON.stringify(updated));
       setNewProduct({ name: '', price: '', category: 'Audio', stock: '20', imageUrl: '', description: '' });
-      alert('✓ Product added to Karki Store!');
+      alert('✓ Product added to TechMate Solution Store!');
     }
   };
 
@@ -250,7 +250,7 @@ const AdminDashboard: NextPage = () => {
       <main className="mx-auto max-w-7xl px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-black text-white">Karki Store Control Center</h1>
+            <h1 className="text-3xl font-black text-white">TechMate Solution Store Control Center</h1>
             <p className="text-xs text-slate-400 mt-1">Manage 400+ catalog products, orders, portfolio & page content from backend</p>
           </div>
 
@@ -329,7 +329,7 @@ const AdminDashboard: NextPage = () => {
         {tab === 'analytics' && (
           <div className="space-y-6">
             <div className="rounded-3xl bg-slate-900 p-6 shadow-xl border border-indigo-950">
-              <h2 className="text-xl font-bold text-white mb-4">Karki Store Performance Overview</h2>
+              <h2 className="text-xl font-bold text-white mb-4">TechMate Solution Store Performance Overview</h2>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
                   <p className="text-xs font-bold text-slate-400 uppercase">Average Order Value</p>
@@ -358,7 +358,7 @@ const AdminDashboard: NextPage = () => {
             {/* Add Product Form */}
             <div className="lg:col-span-1">
               <div className="rounded-3xl bg-slate-900 p-6 shadow-xl border border-indigo-950 sticky top-24">
-                <h2 className="text-lg font-bold text-white mb-4">Add Product to Karki Store</h2>
+                <h2 className="text-lg font-bold text-white mb-4">Add Product to TechMate Solution Store</h2>
                 <form onSubmit={handleAddProduct} className="space-y-3 text-xs">
                   <div>
                     <label className="font-bold text-slate-300 block mb-1">Product Title</label>
@@ -439,7 +439,7 @@ const AdminDashboard: NextPage = () => {
                     type="submit"
                     className="w-full rounded-xl bg-indigo-600 py-3 text-white font-bold hover:bg-indigo-500 transition shadow-md"
                   >
-                    + Add to Karki Store
+                    + Add to TechMate Solution Store
                   </button>
                 </form>
               </div>

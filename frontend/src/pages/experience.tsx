@@ -12,8 +12,8 @@ const CustomerExperiencePage: NextPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative overflow-x-hidden">
       <Head>
-        <title>Human Walking Shopping Experience | Karki Store</title>
-        <meta name="description" content="Watch continuous human walking animations as customer Aarav walks through Karki Store, selects items, pays via eSewa, and unboxes products." />
+        <title>Human Walking Shopping Experience | TechMate Solution Store</title>
+        <meta name="description" content="Watch continuous human walking animations as customer Aarav walks through TechMate Solution Store, selects items, pays via eSewa, and unboxes products." />
       </Head>
 
       <ParticleCanvas />
